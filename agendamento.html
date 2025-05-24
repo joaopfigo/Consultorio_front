@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agendamento Online | Terapias</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+    :root {
+      --cor-principal: #30795b;
+      --cor-nav: #57643a;
+      --cor-destaque: #f7e6bc;
+      --cor-fundo: #fcfaf7;
+      --cor-texto: #2f2d2a;
+    }
+    body {
+      background: var(--cor-fundo);
+      font-family: 'Roboto', Arial, sans-serif;
+      margin: 0;
+      color: var(--cor-texto);
+    }
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--cor-nav);
+      color: #fff;
+      padding: 0.4rem 2vw;
+      height: 72px;
+      min-height: 60px;
+      position: relative;
+      z-index: 1000;
+    }
+    .navbar-logo-central span {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.52rem;
+      color: #fff2c6;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      margin-left: 10px;
+      text-shadow: 0 2px 7px #b79b6350;
+      transition: color 0.18s;
+    }
+
+    /* LOGO CENTRAL */
+    .navbar-logo-central {
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+    .navbar-logo-central img {
+      height: 200px; /* Aqui aumentei um pouco a logo, ajuste conforme seu gosto, mas sem passar de 72px */
+      width: auto;
+      max-width: 210px;
+      object-fit: contain;
+      display: block;
+      margin-right: 12px;
+    }
+
+    /* MENU */
+    .navbar-menu {
+      display: flex;
+      gap: 1.4rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      align-items: center;
+    }
+
+    .navbar-menu a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: color 0.18s;
+    }
+    .navbar-menu a:hover {
+      color: #ffd970;
+    }
+
+    /* Botão do menu sanduíche só aparece em telas pequenas */
+    .navbar-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 2.2rem;
+      cursor: pointer;
+      margin-left: auto;
+    }
+
+    /* RESPONSIVO */
+    @media (max-width: 1050px) {
+      .navbar-menu {
+        position: fixed;
+        top: 72px;
+        right: 0;
+        width: 68vw;
+        max-width: 320px;
+        height: 100vh;
+        background: var(--cor-principal);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.2rem;
+        padding: 2.4rem 1.3rem;
+        box-shadow: -2px 0 18px #2222;
+        transform: translateX(110%);
+        transition: transform 0.28s;
+        z-index: 999;
+      }
+      .navbar-menu.open {
+        transform: translateX(0%);
+      }
+      .navbar-toggle {
+        display: block;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .navbar { padding: 0.3rem 2vw; height: 54px; }
+      .navbar-logo-central img { height: 150px; max-width: 105px; }
+      .navbar-menu { gap: 0.6rem; padding: 1.2rem 2vw; top: 54px; }
+    }
+
+    .container {
+      max-width: 670px;
+      background: #fff;
+      margin: 38px auto;
+      border-radius: 26px;
+      box-shadow: 0 6px 40px rgba(160,130,64,0.08);
+      padding: 36px 6vw 24px 6vw;
+    }
+    h1 {
+      color: var(--cor-principal);
+      font-size: 2.1rem;
+      font-family: 'Playfair Display', serif;
+      margin: 0 0 15px 0;
+      font-weight: 700;
+      text-align: center;
+    }
+    .step {
+      margin-bottom: 31px;
+      border-radius: 13px;
+      background: #fcfaf7;
+      box-shadow: 0 0 0 1.5px #f2f0ea;
+      padding: 23px 17px 15px 17px;
+    }
+    h2 {
+      font-size: 1.13rem;
+      margin: 0 0 14px 0;
+      color: var(--cor-principal);
+      font-weight: 700;
+      font-family: 'Roboto', Arial, sans-serif;
+      letter-spacing: 0.01em;
+    }
+    .btn-form {
+      background: var(--cor-destaque);
+      color: var(--cor-principal);
+      border: none;
+      padding: 11px 28px;
+      border-radius: 8px;
+      font-size: 1.09rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-bottom: 8px;
+      box-shadow: 0 2px 10px rgba(160,130,64,0.09);
+      transition: background 0.2s;
+    }
+    .btn-form:hover {
+      background: #fff3dc;
+    }
+    .obs {
+      font-size: 0.98rem;
+      color: #a48e52;
+      margin-top: 5px;
+    }
+    .treatments {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px 20px;
+      margin-bottom: 7px;
+    }
+    .treatment {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 4px 16px 4px;
+      border: none;
+      border-radius: 15px;
+      background: #f9f6f1;
+      box-shadow: 0 2px 10px rgba(123,80,151,0.08);
+      cursor: pointer;
+      transition: box-shadow 0.17s, background 0.16s;
+      outline: none;
+    }
+    .treatment.selected, .treatment:hover {
+      box-shadow: 0 0 0 2px var(--cor-principal) inset, 0 4px 24px rgba(123,80,151,0.06);
+      background: #f5eefc;
+    }
+    .treatment img {
+      width: 72px;
+      height: 72px;
+      margin-bottom: 7px;
+      border-radius: 14px;
+      object-fit: cover;
+      background: #fff;
+      box-shadow: 0 1px 6px rgba(123,80,151,0.07);
+      border: 1px solid #ede5fa;
+    }
+    .treatment span {
+      font-size: 1.04rem;
+      color: #6d5d7a;
+      font-weight: 600;
+      text-align: center;
+    }
+    .durations label, .combo label {
+      display: inline-block;
+      margin-right: 21px;
+      font-size: 1.01rem;
+      margin-bottom: 9px;
+      color: #4e4360;
+      cursor: pointer;
+    }
+    .promo {
+      background: #f6f0fd;
+      border-left: 4px solid #e7d2ff;
+      margin-top: 11px;
+      padding: 9px 13px 7px 16px;
+      border-radius: 9px;
+      margin-bottom: 8px;
+      font-size: 0.98rem;
+    }
+    .promo h3 {
+      color: #a788d9;
+      margin: 0 0 6px 0;
+      font-size: 1.01rem;
+      font-weight: 700;
+    }
+    .combo label { margin-right: 17px; }
+    .calendar-section {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 7px;
+    }
+    .slots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .slot {
+      padding: 7px 17px;
+      border-radius: 7px;
+      border: 1.3px solid #cdb3ea;
+      background: #faf6ff;
+      color: #7b5097;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.16s, color 0.16s;
+    }
+    .slot.selected, .slot:hover {
+      background: #a788d9;
+      color: #fff;
+      border-color: #a788d9;
+    }
+    .booking-option {
+      background: #f9f6f1;
+      padding: 17px 13px 12px 13px;
+      border-radius: 10px;
+      max-width: 390px;
+      margin-top: 3px;
+    }
+    .btn-login {
+      background: #efe0fa;
+      color: #7b5097;
+      border: none;
+      padding: 8px 19px;
+      border-radius: 7px;
+      font-size: 1.06rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-login .mini {
+      font-size: 0.87rem;
+      color: #bca870;
+      margin-left: 4px;
+    }
+    .or {
+      text-align: center;
+      margin: 13px 0 8px 0;
+      color: #bca870;
+      font-weight: 500;
+    }
+    .guest-form label {
+      display: block;
+      font-size: 0.98rem;
+      color: #7862a5;
+      margin-bottom: 3px;
+      margin-top: 8px;
+    }
+    .guest-form input[type="text"],
+    .guest-form input[type="email"],
+    .guest-form input[type="tel"] {
+      width: 100%;
+      border: 1.1px solid #e7d2ff;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 1rem;
+      margin-top: 2px;
+      background: #f6f0fd;
+    }
+    .phone-input { display: flex; align-items: center; gap: 7px; }
+    .phone-input .flag { font-size: 1.1em; margin-right: 1px; }
+    .chk { margin-top: 5px; font-size: 0.97rem; color: #7862a5; }
+    .btn-continue, #btn-agendar {
+      margin-top: 10px;
+      background: #7b5097;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      font-size: 1.11rem;
+      font-weight: bold;
+      padding: 13px 0;
+      width: 100%;
+      cursor: pointer;
+      box-shadow: 0 2px 18px rgba(130,110,160,0.06);
+      transition: background .16s;
+      letter-spacing: 0.01em;
+    }
+    .btn-continue:hover, #btn-agendar:hover {
+      background: #a788d9;
+    }
+    #btn-agendar[disabled] {
+      background: #d7cae6;
+      color: #f1edf6;
+      cursor: not-allowed;
+    }
+    @media (max-width: 800px) {
+      .container { padding: 10px 1vw 14px 1vw; max-width: 98vw; }
+      .treatments { grid-template-columns: 1fr; gap: 10px 8px; }
+    }
+     .form-btn-area {
+      text-align: right;
+      margin-top: 17px;
+    }
+    .btn-voltar {
+      background: #ede6c6;
+      color: #7b5097;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 15px;
+      font-size: .99rem;
+      font-weight: bold;
+      margin-right: 7px;
+      cursor: pointer;
+      transition: background 0.14s;
+    }
+    .btn-voltar:hover {
+      background: #e2d6b8;
+    }
+    /* Adicional responsivo para formulários e selects */
+    .formulario-fields textarea, .formulario-fields select {
+      width: 100%;
+      font-size: 1rem;
+      border-radius: 7px;
+      padding: 8px 11px;
+      margin-top: 4px;
+      border: 1.1px solid #e7d2ff;
+      background: #f6f0fd;
+      resize: vertical;
+    }
+    @media (max-width: 700px) {
+      .form-btn-area { text-align: center; }
+      .btn-voltar { margin-bottom: 10px; }
+    }
+  </style>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-logo-central">
+      <img src="logo.png" alt="Consultório de Terapia Corporal Sistêmica" />
+      <span>Virlene Figueiredo</span>
+    </div>
+    <button class="navbar-toggle" aria-label="Abrir menu">&#9776;</button>
+    <ul class="navbar-menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="espaco.html">O Espaço</a></li>
+      <li><a href="servicos.html">Serviços</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="contato.html">Contato</a></li>
+      <li><a href="perfil.html"><i class="fa-solid fa-user"></i> Perfil</a></li>
+    </ul>
+  </nav>
+
+  <div class="container" id="agendamento-container">
+    <h1>Agendamento Online</h1>
+    <div class="step" id="step-formulario">
+      <h2>1. Preencha o formulário de queixas. O que você está sentindo?</h2>
+      <button class="btn-form" id="btn-formulario">Acesso ao formulário</button>
+      <div class="obs">Caso não preencha, entende-se que seu objetivo é apenas relaxamento.</div>
+    </div>
+    <div id="formulario-section" class="step" style="display:none;">
+      <form id="form-reclamacoes">
+        <div class="formulario-fields">
+          <label>Descreva seu principal desconforto ou dor:</label>
+          <textarea name="sintomas" rows="2" required></textarea>
+          <label>Há quanto tempo sente esse desconforto?</label>
+          <select name="tempo">
+            <option value="menos1">Menos de 1 semana</option>
+            <option value="1a4">1 a 4 semanas</option>
+            <option value="1a6m">1 a 6 meses</option>
+            <option value="mais6m">Mais de 6 meses</option>
+          </select>
+          <label>Como classifica sua dor?</label>
+          <select name="intensidade">
+            <option value="leve">Leve</option>
+            <option value="moderada">Moderada</option>
+            <option value="forte">Forte</option>
+            <option value="insuportavel">Insuportável</option>
+          </select>
+          <label>Já procurou tratamento médico? Se sim, qual?</label>
+          <textarea name="tratamento" rows="1"></textarea>
+        </div>
+        <div class="form-btn-area">
+          <button type="button" class="btn-voltar" id="voltar-agendamento">Voltar</button>
+          <button type="submit" class="btn-continue">Enviar</button>
+        </div>
+      </form>
+      
+    </div>
+    <div id="formulario-feedback" class="step" style="display:none; text-align:center;">
+      <h2 style="color:#30795b;">Resposta salva!</h2>
+      <p style="margin-bottom:18px;">Seu formulário de queixas foi salvo com sucesso.<br>Pode editar sempre que desejar antes de finalizar o agendamento.</p>
+      <button class="btn-form" id="btn-editar-formulario">Editar resposta</button>
+    </div>
+
+    <div class="step" id="step-tratamento">
+      <h2>2. Escolha qual tratamento deseja realizar</h2>
+<div class="treatments">
+  <div class="treatment">
+    <img src="https://images.pexels.com/photos/3822622/pexels-photo-3822622.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Quick Massage">
+    <span>Quick Massage</span>
+  </div>
+  <div class="treatment">
+    <img src="https://images.pexels.com/photos/3997985/pexels-photo-3997985.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Massoterapia">
+    <span>Massoterapia</span>
+  </div>
+  <div class="treatment">
+    <img src="https://images.pexels.com/photos/3182811/pexels-photo-3182811.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Reflexologia Podal">
+    <span>Reflexologia Podal</span>
+  </div>
+  <div class="treatment">
+    <img src="https://images.pexels.com/photos/6621319/pexels-photo-6621319.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Auriculoterapia">
+    <span>Auriculoterapia</span>
+  </div>
+  <div class="treatment">
+    <img src="https://images.pexels.com/photos/3757942/pexels-photo-3757942.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Ventosa">
+    <span>Ventosa</span>
+  </div>
+  <div class="treatment">
+    <img src="https://images.pexels.com/photos/161599/massage-therapy-acupuncture-161599.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Acupuntura">
+    <span>Acupuntura</span>
+  </div>
+  <div class="treatment">
+    <img src="https://images.pexels.com/photos/4058218/pexels-photo-4058218.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Biomagnetismo">
+    <span>Biomagnetismo</span>
+  </div>
+  <div class="treatment">
+    <img src="https://images.pexels.com/photos/3759657/pexels-photo-3759657.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Reiki">
+    <span>Reiki</span>
+  </div>
+</div>
+
+
+    </div>
+    <div class="step" id="step-duracao">
+      <h2>3. Duração</h2>
+      <div class="durations">
+        <label><input type="radio" name="duracao" checked> 50 minutos - R$ 114,00</label>
+        <label><input type="radio" name="duracao"> 75 minutos - R$ 160,00</label>
+        <label><input type="radio" name="duracao"> 90 minutos - R$ 185,00</label>
+        <label><input type="radio" name="duracao"> 120 minutos - R$ 292,00</label>
+        <label><input type="radio" name="duracao"> 190 minutos - R$ 390,00</label>
+      </div>
+      <div class="promo">
+        <h3>PROMOÇÃO: APROVEITE E ACRESCENTE UMA SESSÃO DE REFLEXO!</h3>
+        <div class="combo">
+          <label><input type="radio" name="reflexo" checked> Não tenho interesse</label>
+          <label><input type="radio" name="reflexo"> 20 minutos - R$ 71,00</label>
+          <label><input type="radio" name="reflexo"> 30 minutos - R$ 84,00</label>
+          <label><input type="radio" name="reflexo"> 50 minutos - R$ 100,00</label>
+          <label><input type="radio" name="reflexo"> 60 minutos - R$ 135,00</label>
+        </div>
+      </div>
+      <div class="promo">
+        <h3>PROMOÇÃO: APROVEITE E ACRESCENTE UMA SESSÃO DE AURICULO!</h3>
+        <div class="combo">
+          <label><input type="radio" name="auriculo" checked> Não tenho interesse</label>
+          <label><input type="radio" name="auriculo"> 10 minutos - R$ 48,00</label>
+        </div>
+      </div>
+    </div>
+<div class="step" id="step-horario">
+  <h2>4. Escolha a data e o horário</h2>
+  <div class="calendar-section">
+    <div id="custom-calendar"></div>
+    <div class="slots" id="slots-area"></div>
+  </div>
+</div>
+    <div class="step" id="step-dados">
+      <h2>5. Preencher dados</h2>
+      <div class="booking-option" id="dados-usuario">
+        <button class="btn-login">Você já está logado!</button>
+      </div>
+      <div class="booking-option" id="dados-guest" style="display:none">
+        <div class="or">Preencha abaixo se não estiver logado</div>
+        <div class="guest-form">
+          <label for="guest-name">Nome</label>
+          <input type="text" id="guest-name" name="guest-name" placeholder="Digite seu nome" required>
+          <label for="guest-email">E-mail</label>
+          <input type="email" id="guest-email" name="guest-email" placeholder="Seu e-mail" required>
+                    <label for="guest-phone">Número de telefone</label>
+          <div class="phone-input">
+            <span class="flag">🇧🇷</span>
+            <input type="tel" id="guest-phone" name="guest-phone" placeholder="+55" pattern="\+?\d{2,15}" required>
+          </div>
+          <div class="chk">
+            <input type="checkbox" id="criar-conta" name="criar-conta">
+            <label for="criar-conta">Criar minha conta Reservio para administrar minhas reservas.</label>
+          </div>
+          <button class="btn-continue" type="submit">CONTINUAR</button>
+        </div>
+      </div>
+    </div>
+    <button id="btn-agendar" class="btn-continue" style="margin:38px auto 0 auto; display:block; width:220px;">Agendar Sessão</button>
+  </div>
+  
+<div class="container" id="success-container" style="display:none;min-height:78vh;">
+  <div class="success-card" style="box-shadow: 0 8px 48px rgba(48,121,91,0.10); padding:44px 34px 40px 34px; border-radius:20px; background:#fff;">
+    <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Check" class="success-icon" style="width:72px; margin-bottom:19px; border-radius:50%; box-shadow:0 2px 10px rgba(48,121,91,0.12); background:#e9f8f0;">
+    <h1 style="color:#30795b;font-family:'Playfair Display',serif;font-size:1.7rem;margin:0 0 15px 0; font-weight:700;letter-spacing:0.02em;">Solicitação realizada!</h1>
+    <div class="subtitle" style="font-size:1.09rem;color:#6d6a60; margin-bottom:13px;">
+      Seu agendamento foi enviado e está aguardando confirmação da terapeuta.
+    </div>
+    <div class="info-box" style="font-size:1rem; color:#646e6a; background:#f6f8f6; border-radius:13px; padding:15px 14px 13px 14px; margin:21px 0 0 0;">
+      Você receberá um e-mail de confirmação ou pode acompanhar o status pela página de <b style="color:#30795b;">Perfil</b>.<br>
+      A terapeuta irá revisar sua solicitação e retornará o mais breve possível.
+    </div>
+    <a class="btn-perfil" href="perfil.html" style="margin-top:32px; display:inline-block; background:#30795b; color:#fff; padding:13px 34px; border-radius:10px; font-size:1.09rem; font-weight:bold; text-decoration:none; transition:background .16s; box-shadow:0 2px 16px rgba(48,121,91,0.09);">Ir para o Perfil</a>
+  </div>
+</div>
+
+  <script>
+    let formularioEnviado = false;
+    document.getElementById('btn-formulario').onclick = function() {
+      document.getElementById('formulario-section').style.display = 'block';
+      document.getElementById('step-formulario').style.display = 'none';
+    };
+    document.getElementById('voltar-agendamento').onclick = function() {
+      if (formularioEnviado) {
+        document.getElementById('formulario-section').style.display = 'none';
+        document.getElementById('formulario-feedback').style.display = 'block';
+      } else {
+        document.getElementById('formulario-section').style.display = 'none';
+        document.getElementById('step-formulario').style.display = '';
+      }
+    };
+
+    document.getElementById('form-reclamacoes').onsubmit = function(e) {
+      e.preventDefault();
+      formularioEnviado = true; // Marca que foi enviado!
+      document.getElementById('formulario-section').style.display = 'none';
+      document.getElementById('formulario-feedback').style.display = 'block';
+    };
+
+    document.getElementById('btn-editar-formulario').onclick = function() {
+      document.getElementById('formulario-feedback').style.display = 'none'; // esconde feedback
+      document.getElementById('formulario-section').style.display = 'block'; // mostra o formulário
+    };
+// Função calendário visual
+function renderCalendar(year, month) {
+  const cal = document.getElementById('custom-calendar');
+  cal.innerHTML = '';
+  const dt = new Date(year, month, 1);
+  const days = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+  let html = `<div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;'>
+    <button id='prev-month' style='background:none;border:none;font-size:1.3em;cursor:pointer;'>&lt;</button>
+    <span style='font-weight:700;color:#7b5097;'>${dt.toLocaleString('pt-BR', {month:'long'})} ${year}</span>
+    <button id='next-month' style='background:none;border:none;font-size:1.3em;cursor:pointer;'>&gt;</button>
+  </div>`;
+  html += `<div style='display:grid;grid-template-columns:repeat(7,1fr);gap:2px 0;font-weight:bold;'>${days.map(d=>`<span style='color:#bfa464'>${d}</span>`).join('')}</div>`;
+  let firstDay = dt.getDay();
+  let totalDays = new Date(year, month+1, 0).getDate();
+  html += `<div style='display:grid;grid-template-columns:repeat(7,1fr);gap:4px 0;'>`;
+  for(let i=0;i<firstDay;i++) html+="<span></span>";
+  for(let d=1;d<=totalDays;d++){
+    let now = new Date();
+    let isToday = d===now.getDate()&&month===now.getMonth()&&year===now.getFullYear();
+    let dayClass = `cal-day${isToday?" today":""}`;
+    html += `<button class='${dayClass}' data-date='${year}-${(month+1).toString().padStart(2,'0')}-${d.toString().padStart(2,'0')}' style='margin:2px;padding:9px 0;border:none;background:${isToday?'#d8e8d2':'#fff9e2'};border-radius:8px;color:#756430;font-size:1.02em;cursor:pointer;'>${d}</button>`;
+  }
+  html += `</div>`;
+  cal.innerHTML = html;
+  document.getElementById('prev-month').onclick = ()=>renderCalendar(month===0?year-1:year, month===0?11:month-1);
+  document.getElementById('next-month').onclick = ()=>renderCalendar(month===11?year+1:year, month===11?0:month+1);
+  document.querySelectorAll('.cal-day').forEach(btn=>{
+    btn.onclick = function(){
+      document.querySelectorAll('.cal-day').forEach(b=>b.style.boxShadow='none');
+      this.style.boxShadow='0 0 0 2px #7b5097 inset';
+      const val = this.getAttribute('data-date');
+      renderSlots(val);
+    };
+  });
+}
+// Slots
+const horariosDisponiveis = {
+  '2024-05-22': ["10:00","10:30","12:00","13:30","14:00","15:00"],
+  '2024-05-23': ["09:30","11:00","13:00","14:30","16:00"],
+  '2024-05-24': ["09:00","10:00","11:30","13:30","16:30"]
+};
+function renderSlots(val){
+  const slotsArea = document.getElementById('slots-area');
+  slotsArea.innerHTML = '';
+  let slots = horariosDisponiveis[val] || ["09:00","10:30","13:00","15:00","16:30"];
+  slots.forEach(h => {
+    const el = document.createElement('button');
+    el.type = 'button';
+    el.className = 'slot';
+    el.textContent = h;
+    el.onclick = function() {
+      document.querySelectorAll('.slot').forEach(b=>b.classList.remove('selected'));
+      this.classList.add('selected');
+    };
+    slotsArea.appendChild(el);
+  });
+}
+const now = new Date();
+renderCalendar(now.getFullYear(), now.getMonth());
+    const usuarioLogado = true;
+    document.getElementById('dados-usuario').style.display = usuarioLogado ? '' : 'none';
+    document.getElementById('dados-guest').style.display = usuarioLogado ? 'none' : '';
+
+    document.getElementById('btn-agendar').onclick = function(e) {
+    // Validação básica
+    const duracao = document.querySelector('input[name="duracao"]:checked');
+    const slot = document.querySelector('.slot.selected');
+    let guestValid = true;
+    if (document.getElementById('dados-guest').style.display !== 'none') {
+      guestValid = [...document.querySelectorAll('#dados-guest input[required]')].every(f=>f.value.trim()!=="");
+    }
+    if (duracao && slot && guestValid) {
+      document.getElementById('agendamento-container').style.display = 'none';
+      document.getElementById('success-container').style.display = 'flex';
+      window.scrollTo({top:0});
+    } else {
+      alert('Preencha todos os campos obrigatórios para agendar a sessão.');
+    }
+
+  };
+
+  // Seleção visual dos tratamentos (adicione se ainda não tem)
+  document.querySelectorAll('.treatment').forEach(card => {
+    card.onclick = function() {
+      document.querySelectorAll('.treatment').forEach(c=>c.classList.remove('selected'));
+      this.classList.add('selected');
+    }
+  });
+
+      // Menu responsivo sanduíche
+    const navbarToggle = document.querySelector('.navbar-toggle');
+    const navbarMenu = document.querySelector('.navbar-menu');
+    navbarToggle.addEventListener('click', () => {
+      navbarMenu.classList.toggle('open');
+    });
+    // Fechar menu ao clicar em um item
+    document.querySelectorAll('.navbar-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        navbarMenu.classList.remove('open');
+      });
+    });
+  </script>
+</body>
+</html>
