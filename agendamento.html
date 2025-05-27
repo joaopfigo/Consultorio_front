@@ -407,30 +407,137 @@
     <div id="formulario-section" class="step" style="display:none;">
       <form id="form-reclamacoes">
         <div class="formulario-fields">
-          <label>Descreva seu principal desconforto ou dor:</label>
-          <textarea name="sintomas" rows="2" required></textarea>
-          <label>Há quanto tempo sente esse desconforto?</label>
-          <select name="tempo">
-            <option value="menos1">Menos de 1 semana</option>
-            <option value="1a4">1 a 4 semanas</option>
-            <option value="1a6m">1 a 6 meses</option>
-            <option value="mais6m">Mais de 6 meses</option>
-          </select>
-          <label>Como classifica sua dor?</label>
-          <select name="intensidade">
-            <option value="leve">Leve</option>
-            <option value="moderada">Moderada</option>
-            <option value="forte">Forte</option>
-            <option value="insuportavel">Insuportável</option>
-          </select>
-          <label>Já procurou tratamento médico? Se sim, qual?</label>
-          <textarea name="tratamento" rows="1"></textarea>
+          <label for="principal_desconforto">Descreva seu principal desconforto ou dor:</label>
+          <textarea id="principal_desconforto" name="principal_desconforto" rows="3"></textarea>
+
+          <label for="queixa_secundaria">Descreva a queixa secundária:</label>
+          <textarea id="queixa_secundaria" name="queixa_secundaria" rows="2"></textarea>
+
+          <label for="tempo_desconforto">Há quanto tempo sente esse desconforto?</label>
+          <input type="text" id="tempo_desconforto" name="tempo_desconforto">
+
+          <label for="classificacao_dor">Como classifica sua dor?</label>
+          <input type="text" id="classificacao_dor" name="classificacao_dor">
+
+          <label for="tratamento_medico">Já procurou tratamento médico? Se sim, qual?</label>
+          <textarea id="tratamento_medico" name="tratamento_medico" rows="2"></textarea>
         </div>
+
+        <div class="formulario-fields" style="margin-top: 25px;">
+          <h2>Condições de saúde (marque as opções que se aplicam):</h2>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <label><input type="checkbox" name="check1"> Sob cuidados de um médico/terapeuta</label>
+            <label><input type="checkbox" name="check2"> Toma medicação com prescrição médica</label>
+            <label><input type="checkbox" name="check3"> Grávida ou tentando engravidar</label>
+            <label><input type="checkbox" name="check4"> Lesão em alguma parte do corpo</label>
+            <label><input type="checkbox" name="check5"> Torcicolo</label>
+            <label><input type="checkbox" name="check6"> Dores na coluna/costas (qual parte)</label>
+            <label><input type="checkbox" name="check7"> Câimbras</label>
+            <label><input type="checkbox" name="check8"> Distensões</label>
+            <label><input type="checkbox" name="check9"> Fraturas</label>
+            <label><input type="checkbox" name="check10"> Edemas</label>
+            <label><input type="checkbox" name="check11"> Dores em outras partes do corpo (quais)</label>
+            <label><input type="checkbox" name="check12"> Cirurgias recentes ou passadas</label>
+            <label><input type="checkbox" name="check13"> Problemas de pele/couro cabeludo</label>
+            <label><input type="checkbox" name="check14"> Digestão (azia, refluxo, gastrite)</label>
+            <label><input type="checkbox" name="check15"> Intestino</label>
+            <label><input type="checkbox" name="check16"> Prisão de Ventre/Diarreia</label>
+            <label><input type="checkbox" name="check17"> Má circulação</label>
+            <label><input type="checkbox" name="check18"> Trombose</label>
+            <label><input type="checkbox" name="check19"> Problemas Cardíacos</label>
+            <label><input type="checkbox" name="check20"> Pressão alta/baixa</label>
+            <label><input type="checkbox" name="check21"> Artrite/Reumatismo</label>
+            <label><input type="checkbox" name="check22"> Asma</label>
+            <label><input type="checkbox" name="check23"> Alergias</label>
+            <label><input type="checkbox" name="check24"> Rinite/Sinusite</label>
+            <label><input type="checkbox" name="check25"> Diabetes</label>
+            <label><input type="checkbox" name="check26"> Colesterol</label>
+            <label><input type="checkbox" name="check27"> Epilepsia</label>
+            <label><input type="checkbox" name="check28"> Osteoporose</label>
+            <label><input type="checkbox" name="check29"> Câncer</label>
+            <label><input type="checkbox" name="check30"> Doença contagiosa ou infecciosa</label>
+            <label><input type="checkbox" name="check31"> Sono (como é)</label>
+          </div>
+        </div>
+
+        <div class="formulario-fields" style="margin-bottom: 15px;">
+          <h2 style="margin-top: 35px;">Estado emocional</h2>
+          <fieldset style="border: none; margin-bottom: 20px;">
+            <legend>Ansiedade (1 = leve / 5 = intensa):</legend>
+            <label><input type="radio" name="ansiedade" value="1"> 1</label>
+            <label><input type="radio" name="ansiedade" value="2"> 2</label>
+            <label><input type="radio" name="ansiedade" value="3"> 3</label>
+            <label><input type="radio" name="ansiedade" value="4"> 4</label>
+            <label><input type="radio" name="ansiedade" value="5"> 5</label>
+          </fieldset>
+
+          <fieldset style="border: none; margin-bottom: 20px;">
+            <legend>Tristeza:</legend>
+            <label><input type="radio" name="tristeza" value="1"> 1</label>
+            <label><input type="radio" name="tristeza" value="2"> 2</label>
+            <label><input type="radio" name="tristeza" value="3"> 3</label>
+            <label><input type="radio" name="tristeza" value="4"> 4</label>
+            <label><input type="radio" name="tristeza" value="5"> 5</label>
+          </fieldset>
+
+          <fieldset style="border: none; margin-bottom: 20px;">
+            <legend>Raiva:</legend>
+            <label><input type="radio" name="raiva" value="1"> 1</label>
+            <label><input type="radio" name="raiva" value="2"> 2</label>
+            <label><input type="radio" name="raiva" value="3"> 3</label>
+            <label><input type="radio" name="raiva" value="4"> 4</label>
+            <label><input type="radio" name="raiva" value="5"> 5</label>
+          </fieldset>
+
+          <fieldset style="border: none; margin-bottom: 20px;">
+            <legend>Preocupação/Pensamentos:</legend>
+            <label><input type="radio" name="preocupacao" value="1"> 1</label>
+            <label><input type="radio" name="preocupacao" value="2"> 2</label>
+            <label><input type="radio" name="preocupacao" value="3"> 3</label>
+            <label><input type="radio" name="preocupacao" value="4"> 4</label>
+            <label><input type="radio" name="preocupacao" value="5"> 5</label>
+          </fieldset>
+
+          <fieldset style="border: none; margin-bottom: 20px;">
+            <legend>Medo:</legend>
+            <label><input type="radio" name="medo" value="1"> 1</label>
+            <label><input type="radio" name="medo" value="2"> 2</label>
+            <label><input type="radio" name="medo" value="3"> 3</label>
+            <label><input type="radio" name="medo" value="4"> 4</label>
+            <label><input type="radio" name="medo" value="5"> 5</label>
+          </fieldset>
+
+          <fieldset style="border: none; margin-bottom: 20px;">
+            <legend>Raiva/irritação:</legend>
+            <label><input type="radio" name="irritacao" value="1"> 1</label>
+            <label><input type="radio" name="irritacao" value="2"> 2</label>
+            <label><input type="radio" name="irritacao" value="3"> 3</label>
+            <label><input type="radio" name="irritacao" value="4"> 4</label>
+            <label><input type="radio" name="irritacao" value="5"> 5</label>
+          </fieldset>
+
+          <fieldset style="border: none; margin-bottom: 20px;">
+            <legend>Angústia:</legend>
+            <label><input type="radio" name="angustia" value="1"> 1</label>
+            <label><input type="radio" name="angustia" value="2"> 2</label>
+            <label><input type="radio" name="angustia" value="3"> 3</label>
+            <label><input type="radio" name="angustia" value="4"> 4</label>
+            <label><input type="radio" name="angustia" value="5"> 5</label>
+          </fieldset>
+        </div>
+
+        <div class="formulario-fields" style="margin-top: 25px;">
+          <label>
+            <input type="checkbox" required> Afirmo ter lido e discutido as informações acima com meu terapeuta. Estou ciente de que o tratamento não é diagnóstico e nem mesmo substituto para o meu tratamento médico. Afirmo não ter omitido nenhuma informação concernente à minha saúde que devesse ter sido revelada e me responsabilizo por comunicar à minha terapeuta qualquer alteração em minhas condições clínicas que possa ocorrer no futuro.
+          </label>
+        </div>
+
         <div class="form-btn-area">
           <button type="button" class="btn-voltar" id="voltar-agendamento">Voltar</button>
           <button type="submit" class="btn-continue">Enviar</button>
         </div>
       </form>
+
       
     </div>
     <div id="formulario-feedback" class="step" style="display:none; text-align:center;">
