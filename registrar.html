@@ -302,9 +302,9 @@
           document.getElementById('loginError').innerText = res.message || 'Email ou senha inválidos.';
         }
       })
-      .catch(() => {
+      .catch((err) => {
         document.getElementById('loginError').style.display = 'block';
-        document.getElementById('loginError').innerText = 'Erro ao conectar ao servidor: ' + e;
+        document.getElementById('loginError').innerText = 'Erro ao conectar ao servidor: ' + (err.message || err);
       });
     }
 
@@ -342,9 +342,9 @@
           document.getElementById('registerError').innerText = res.message || 'Erro ao registrar.';
         }
       })
-      .catch(() => {
+      .catch((err) => {
         document.getElementById('registerError').style.display = 'block';
-        document.getElementById('registerError').innerText = 'Erro ao conectar ao servidor.';
+        document.getElementById('registerError').innerText = 'Erro ao conectar ao servidor: ' + (err.message || err);
       });
     }
 
