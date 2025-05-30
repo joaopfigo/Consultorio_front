@@ -235,9 +235,17 @@
         <input type="password" id="register-senha2" required autocomplete="new-password">
       </div>
       <div class="campo">
-        <label for="register-nascimento">Data de nascimento</label>
-        <input type="date" id="register-nascimento" required>
-      </div>
+  <label for="register-nascimento">Data de nascimento</label>
+  <input 
+    type="date" 
+    id="register-nascimento" 
+    name="register-nascimento"
+    min="1900-01-01" 
+    max="2025-12-31"
+    required
+  >
+</div>
+
       <div class="campo">
         <label for="register-sexo">Sexo</label>
         <select id="register-sexo" required>
