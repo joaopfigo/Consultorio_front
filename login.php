@@ -1,7 +1,11 @@
 <?php
-require_once 'conexao.php'; // caminho correto
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-header('Content-Type: application/json');
+session_start();
+header("Content-Type: application/json");
+require_once 'conexao.php';
 
 if (empty($_POST['email']) || empty($_POST['senha'])) {
     echo json_encode(['success' => false, 'message' => 'Preencha email e senha.']);
@@ -11,20 +15,31 @@ if (empty($_POST['email']) || empty($_POST['senha'])) {
 $email = $_POST['email'];
 $senha = $_POST['senha'];
 
-// Busca o usuário pelo email
 $stmt = $conn->prepare("SELECT id, nome, senha_hash FROM usuarios WHERE email = ?");
+if (!$stmt) {
+    echo json_encode(['success' => false, 'message' => 'Erro no prepare: ' . $conn->error]);
+    exit;
+}
 $stmt->bind_param("s", $email);
-$stmt->execute();
+
+if (!$stmt->execute()) {
+    echo json_encode(['success' => false, 'message' => 'Erro ao executar: ' . $stmt->error]);
+    exit;
+}
+
 $result = $stmt->get_result();
 if ($row = $result->fetch_assoc()) {
-    if (password_verify($senha, $row['senha_hash'])) {
-        // Login ok!
-        session_start();
-        $_SESSION['usuario_id'] = $row['id'];
-        $_SESSION['usuario_nome'] = $row['nome'];
-        echo json_encode(['success' => true]);
+    // Confirma se senha_hash realmente existe
+    if (isset($row['senha_hash']) && !empty($row['senha_hash'])) {
+        if (password_verify($senha, $row['senha_hash'])) {
+            $_SESSION['usuario_id'] = $row['id'];
+            $_SESSION['usuario_nome'] = $row['nome'];
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Senha incorreta!']);
+        }
     } else {
-        echo json_encode(['success' => false, 'message' => 'Senha incorreta!']);
+        echo json_encode(['success' => false, 'message' => 'Erro: senha não cadastrada no banco!']);
     }
 } else {
     echo json_encode(['success' => false, 'message' => 'Usuário não encontrado!']);
@@ -32,3 +47,4 @@ if ($row = $result->fetch_assoc()) {
 $stmt->close();
 $conn->close();
 ?>
+
