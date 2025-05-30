@@ -144,7 +144,7 @@
   display: flex;
   align-items: flex-start;  /* Alinha pelo topo */
   justify-content: center;
-  background: url('imagem-hero.png') center center/cover no-repeat;
+  background: url('img/imagem-hero.png') center center/cover no-repeat;
   /* Substitua pelo nome do seu arquivo de fundo */
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
@@ -627,6 +627,58 @@
       font-size: 1.5rem;
     }
   }
+ #btn-agendar-fixo {
+  position: fixed;
+  right: 28px;
+  bottom: 28px;
+  z-index: 9999;
+  background: linear-gradient(90deg, #264a85 15%, #4793c7 100%);
+  color: #fff;
+  font-size: 1.23rem;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 700;
+  border: none;
+  border-radius: 999px;  /* ultra arredondado */
+  padding: 1.1rem 2.25rem 1.1rem 2.35rem;
+  box-shadow: 0 6px 24px #264a8533;
+  cursor: pointer;
+  transition: background 0.18s, box-shadow 0.16s, transform 0.13s;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  letter-spacing: 0.01em;
+}
+#btn-agendar-fixo:hover {
+  background: linear-gradient(90deg, #4793c7 5%, #264a85 85%);
+  color: #ffe89a;
+  box-shadow: 0 10px 36px #264a8575;
+  transform: scale(1.08);
+}
+#btn-agendar-fixo i {
+  font-size: 1.47rem;
+  background: #fff3;
+  border-radius: 50%;
+  padding: 0.33rem 0.36rem;
+  transition: background 0.13s;
+}
+#btn-agendar-fixo:hover i {
+  background: #fff6;
+}
+@media (max-width: 600px) {
+  #btn-agendar-fixo {
+    font-size: 1.07rem;
+    padding: 0.77rem 1.25rem 0.77rem 1.27rem;
+    right: 12px;
+    bottom: 12px;
+    border-radius: 999px;
+    gap: 0.35rem;
+  }
+  #btn-agendar-fixo i {
+    font-size: 1.08rem;
+    padding: 0.22rem 0.23rem;
+  }
+}
+
 
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -637,7 +689,7 @@
   <!-- Navbar -->
   <nav class="navbar">
     <div class="navbar-logo-central">
-      <img src="logo.png" alt="Consultório de Terapia Corporal Sistêmica" />
+      <img src="img/logo.png" alt="Consultório de Terapia Corporal Sistêmica" />
       <span>Virlene Figueiredo</span>
     </div>
     <button class="navbar-toggle" aria-label="Abrir menu">&#9776;</button>
@@ -666,7 +718,7 @@
     <div class="stat"><span>35</span>ANOS<small>de atuação</small></div>
     <div class="stat"><span>8</span>TERAPIAS<small>disponíveis </small></div>
     <div class="stat"><span>+20</span>CURSOS<small>concluídos</small></div>
-    <div class="stat"><span>+15.000</span>ATENDIMENTOS<small>realizados por mim</small></div>
+    <div class="stat"><span>+15.000</span>ATENDIMENTOS<small>realizados </small></div>
   </section>
 
   <!-- Seção Cuidado Integral e Foto -->
@@ -676,7 +728,7 @@
       <p>No Consultório de Terapia Corporal Sistêmica, cada atendimento é guiado por escuta sensível, técnica apurada e o saber ancestral da medicina chinesa. Aqui, o toque terapêutico se torna ponte para o autoconhecimento e a harmonia entre corpo, mente e emoções.</p>
     </div>
     <div class="integral-image">
-      <img src="virlene.png" alt="Virlene Figueiredo" />
+      <img src="img/virlene.png" alt="Virlene Figueiredo" />
       <!-- Substitua virlene.png pelo nome correto da imagem da Virlene -->
     </div>
   </section>
@@ -708,8 +760,8 @@
       <a href="sobre.html" class="btn-main pro-btn-elegant">Mais sobre Virlene &rarr;</a>
     </div>
       <div class="purpose-collage">
-        <img src="pincelada.png" alt="Pincelada abstrata" class="collage-bg">
-        <img src="itens.png" alt="Itens de terapia corporal" class="collage-itens">
+        <img src="img/pincelada.png" alt="Pincelada abstrata" class="collage-bg">
+        <img src="img/itens.png" alt="Itens de terapia corporal" class="collage-itens">
       </div>
   </section>
 
@@ -747,7 +799,7 @@
 
   <!-- Perguntas Frequentes -->
   <section class="faq-section">
-    <div class="faq-title">Perguntas frequentes sobre massoterapia</div>
+    <div class="faq-title">Perguntas frequentes sobre terapia corporal</div>
     <div class="faq-list">
       <div class="faq-item open"><strong>1. Terei resultados com apenas 1 sessão?</strong>
         <div class="faq-answer">
@@ -801,6 +853,10 @@
   <footer class="footer">
     <p>Consultório de Terapia Corporal Sistêmica</p>
   </footer>
+  <a href="agendamento.html" id="btn-agendar-fixo" title="Agendar Consulta">
+  <i class="fa-solid fa-calendar-check"></i>
+  Agendar Consulta
+</a>
   <script>
     // FAQ interativo: abre/fecha respostas
     document.querySelectorAll('.faq-item').forEach(item => {

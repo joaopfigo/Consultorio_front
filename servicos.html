@@ -229,7 +229,7 @@
 <body>
   <nav class="navbar">
     <div class="navbar-logo-central">
-      <img src="logo.png" alt="Consultório de Terapia Corporal Sistêmica" />
+      <img src="img/logo.png" alt="Consultório de Terapia Corporal Sistêmica" />
       <span>Virlene Figueiredo</span>
     </div>
     <button class="navbar-toggle" aria-label="Abrir menu">&#9776;</button>
@@ -307,11 +307,18 @@
   </div>
 
   <div id="detalhe-servico" style="display:none; max-width:700px; margin:38px auto 60px auto; background:#fff; border-radius:18px; box-shadow:0 4px 32px rgba(106,80,54,0.09); padding:46px 6vw 40px 6vw;">
-  <button style="float:right; background:none; border:none; color:#6A5036; font-size:1.7rem; cursor:pointer; font-weight:bold;" onclick="voltarParaServicos()">&times;</button>
+  <!-- Botão de voltar no lado esquerdo -->
+  <div style="width:100%; display:flex; justify-content:flex-start; margin-bottom:16px;">
+    <button onclick="voltarParaServicos()" 
+      style="display: flex; align-items: center; gap: 7px; border: none; background: none; color: #30795b; font-size: 1.18rem; font-weight: 700; cursor: pointer; transition: color .16s;">
+      <span style="font-size: 1.42rem; margin-right:4px;"><i class="fa-solid fa-arrow-left-long"></i></span>
+      Voltar
+    </button>
+  </div>
   <img id="detalhe-img" src="" alt="" style="width:94px; height:94px; border-radius:13px; object-fit:cover; box-shadow:0 2px 8px rgba(106,80,54,0.09); margin-bottom:15px; display:block; margin-left:auto; margin-right:auto;">
   <h2 id="detalhe-titulo" style="color:#30795b; font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:700; text-align:center; margin:0 0 19px 0;"></h2>
   <div id="detalhe-desc" style="color:#423d38; font-size:1.07rem; margin-bottom:32px; text-align:left;"></div>
-  <button class="btn-agendar" onclick="window.location.href='agendamento.html'" style="display:block; margin:0 auto; background:#30795b; color:#fff; border:none; border-radius:8px; padding:12px 38px; font-size:1.10rem; font-weight:600; box-shadow:0 2px 12px rgba(106,80,54,0.08);">Agendar Consulta</button>
+  <button class="btn-agendar" onclick="agendarComServicoSelecionado()" style="display:block; margin:0 auto; background:#30795b; color:#fff; border:none; border-radius:8px; padding:12px 38px; font-size:1.10rem; font-weight:600; box-shadow:0 2px 12px rgba(106,80,54,0.08);">Agendar Consulta</button>
 </div>
 
  
@@ -400,6 +407,14 @@
         navbarMenu.classList.remove('open');
       });
     });
+    function agendarComServicoSelecionado() {
+      // Captura o título do serviço exibido
+      const servico = document.getElementById('detalhe-titulo').innerText;
+      // Salva o nome do serviço escolhido no localStorage
+      localStorage.setItem('servicoSelecionado', servico);
+      // Redireciona para a página de agendamento
+      window.location.href = 'agendamento.html';
+    }
 </script>
 </body>
 </html>

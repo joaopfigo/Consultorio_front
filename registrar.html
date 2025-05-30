@@ -3,68 +3,79 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registre-se | Plataforma Terapias</title>
+  <title>Login ou Registro | Consultório Terapias</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
   <style>
     body {
-      background: #f5e8e4;
+      background: #f6f2ee;
       margin: 0;
       font-family: 'Roboto', Arial, sans-serif;
-    }
-    .register-container {
+      min-height: 100vh;
       display: flex;
-      justify-content: center;
       align-items: center;
-      height: 100vh;
+      justify-content: center;
     }
-    .register-form {
+    .login-registro-container {
       background: #fff;
-      border-radius: 16px;
-      padding: 48px 40px 36px 40px;
-      box-shadow: 0 4px 32px rgba(0,0,0,0.12);
+      border-radius: 18px;
+      box-shadow: 0 4px 28px rgba(86,70,50,0.14);
       width: 100%;
-      max-width: 410px;
+      max-width: 420px;
+      padding: 38px 32px 32px 32px;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 19px;
     }
-    .register-title {
+    .logo {
+      text-align: center;
+      margin-bottom: 9px;
+    }
+    .logo img {
+      height: 54px;
+    }
+    .titulo-principal {
+      text-align: center;
       font-family: 'Playfair Display', serif;
-      font-size: 2.6rem;
-      color: #6d4c84;
-      text-align: center;
-      margin-bottom: 4px;
+      font-size: 2.2rem;
       font-weight: 700;
+      color: #4c3523;
+      margin-bottom: 3px;
+      letter-spacing: 0.02em;
     }
-    .login-link {
+    .toggle-link {
       text-align: center;
-      color: #7c7c7c;
-      font-size: 1.05rem;
+      font-size: 1.07rem;
+      color: #856749;
+      margin-bottom: 5px;
     }
-    .login-link a {
-      color: #6d4c84;
-      font-weight: bold;
+    .toggle-link a {
+      color: #2c7b63;
       text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
     }
-    .btn-google, .btn-facebook, .btn-email {
+    .social-btn {
       display: flex;
       align-items: center;
-      justify-content: center;
-      padding: 11px 0;
-      border: none;
+      gap: 13px;
       border-radius: 6px;
-      font-size: 1.11rem;
-      font-family: 'Roboto', Arial, sans-serif;
+      border: none;
+      font-size: 1.09rem;
+      padding: 12px 0;
+      font-weight: 600;
       cursor: pointer;
-      gap: 12px;
+      justify-content: center;
+      margin-bottom: 6px;
+      transition: background .16s;
     }
     .btn-google {
       background: #fff;
-      border: 1.5px solid #e0e0e0;
+      border: 1.3px solid #d7d7d7;
       color: #444;
     }
     .btn-google img {
-      width: 22px;
+      width: 21px;
+      height: 21px;
     }
     .btn-facebook {
       background: #1877f2;
@@ -72,81 +83,269 @@
       border: none;
     }
     .btn-facebook img {
-      width: 22px;
+      width: 21px;
+      height: 21px;
       background: #fff;
       border-radius: 50%;
     }
-    .btn-email {
-      background: #eee4f2;
-      color: #6d4c84;
-      font-weight: bold;
-      border: 1.5px solid #cbbfd7;
+    .btn-apple {
+      background: #111;
+      color: #fff;
+      border: none;
+    }
+    .btn-apple img {
+      width: 21px;
+      height: 21px;
+    }
+    .btn-microsoft {
+      background: #f5f5f5;
+      color: #24292f;
+      border: 1.3px solid #e0e0e0;
+    }
+    .btn-microsoft img {
+      width: 19px;
+      height: 19px;
     }
     .divider {
       display: flex;
       align-items: center;
-      gap: 10px;
-      color: #b0a0bd;
-      font-size: 1.07rem;
-      margin: 0 0 0 0;
+      gap: 12px;
+      color: #b8b0ad;
+      font-size: 1.03rem;
+      margin: 12px 0 2px 0;
     }
     .divider::before, .divider::after {
       content: "";
       flex: 1;
       height: 1px;
-      background: #e0d2ea;
+      background: #e7ded8;
     }
-    .register-checkbox {
+    .login-form, .register-form {
       display: flex;
-      align-items: flex-start;
-      margin-top: 10px;
+      flex-direction: column;
+      gap: 15px;
     }
-    .register-checkbox input[type="checkbox"] {
-      margin-right: 9px;
-      accent-color: #6d4c84;
+    .campo {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
-    .register-checkbox label {
+    .campo label {
       font-size: 0.98rem;
-      color: #6d4c84;
+      color: #6b5952;
     }
-    .register-checkbox a {
-      color: #6d4c84;
-      text-decoration: underline;
+    .campo input, .campo select {
+      font-size: 1.04rem;
+      padding: 9px 11px;
+      border-radius: 6px;
+      border: 1.1px solid #dac9b7;
+      background: #f8f7f5;
+      outline: none;
     }
+    .login-btn, .register-btn, .guest-btn {
+      background: #2c7b63;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 12px 0;
+      font-size: 1.09rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 2px;
+      margin-bottom: 3px;
+      transition: background 0.15s;
+    }
+    .login-btn:hover, .register-btn:hover, .guest-btn:hover {
+      background: #175344;
+    }
+    .guest-btn {
+      background: #a3865a;
+      margin-top: 8px;
+    }
+    .error-msg, .success-msg {
+      font-size: 1.04rem;
+      padding: 8px 0 2px 0;
+      color: #d84c3d;
+      text-align: center;
+      display: none;
+    }
+    .success-msg { color: #1a7c3a; }
     @media (max-width: 600px) {
-      .register-container {
-        align-items: flex-start;
-        padding: 30px 0 0 0;
-        height: auto;
+      .login-registro-container {
+        max-width: 98vw;
+        padding: 17px 3vw 20px 3vw;
       }
-      .register-form {
-        padding: 28px 10px 24px 10px;
-        max-width: 97vw;
-      }
-      .register-title {
-        font-size: 2rem;
+      .titulo-principal {
+        font-size: 1.27rem;
       }
     }
   </style>
 </head>
 <body>
-  <div class="register-container">
-    <form class="register-form">
-      <h1 class="register-title">Registre-se</h1>
-      <p class="login-link">Já é membro? <a href="#">Login</a></p>
-      <button type="button" class="btn-google">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google"> Registrar-se com Google
-      </button>
-      <button type="button" class="btn-facebook">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png" alt="Facebook"> Registrar-se com Facebook
-      </button>
-      <div class="divider"><span>ou</span></div>
-      <button type="button" class="btn-email">Registrar-se com email</button>
-      <div class="register-checkbox">
-        <input type="checkbox" id="publicProfile" checked>
-        <label for="publicProfile">Registrar-se neste site com um perfil público. <a href="#">Saiba mais</a></label>
+  <div class="login-registro-container">
+    <div class="logo">
+      <img src="img/logo.png" alt="Logo Consultório">
+    </div>
+    <div class="titulo-principal" id="tituloForm">Entrar</div>
+    <div class="toggle-link" id="toggleLink">
+      Não tem conta? <a onclick="showRegister()">Registrar-se</a>
+    </div>
+    <!-- Social login (Google, Apple, Facebook, Microsoft) -->
+    <button class="social-btn btn-google"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"> Entrar com Google</button>
+    <button class="social-btn btn-facebook"><img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png"> Entrar com Facebook</button>
+    <button class="social-btn btn-apple"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg"> Entrar com Apple</button>
+    <button class="social-btn btn-microsoft"><img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg"> Entrar com Microsoft</button>
+    <div class="divider"><span>ou</span></div>
+
+    <!-- Formulário de Login -->
+    <form class="login-form" id="formLogin">
+      <div class="campo">
+        <label for="login-email">Email</label>
+        <input type="email" id="login-email" required autocomplete="email">
       </div>
+      <div class="campo">
+        <label for="login-senha">Senha</label>
+        <input type="password" id="login-senha" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="login-btn">Entrar</button>
+      <button type="button" class="guest-btn" onclick="loginVisitante()">Entrar como Visitante</button>
+      <div class="error-msg" id="loginError"></div>
+    </form>
+
+    <!-- Formulário de Registro -->
+    <form class="register-form" id="formRegister" style="display: none;">
+      <div class="campo">
+        <label for="register-nome">Nome completo</label>
+        <input type="text" id="register-nome" required autocomplete="name">
+      </div>
+      <div class="campo">
+        <label for="register-email">Email</label>
+        <input type="email" id="register-email" required autocomplete="email">
+      </div>
+      <div class="campo">
+        <label for="register-telefone">Telefone (opcional)</label>
+        <input type="text" id="register-telefone" autocomplete="tel">
+      </div>
+      <div class="campo">
+        <label for="register-senha">Senha</label>
+        <input type="password" id="register-senha" required autocomplete="new-password">
+      </div>
+      <div class="campo">
+        <label for="register-senha2">Confirmar senha</label>
+        <input type="password" id="register-senha2" required autocomplete="new-password">
+      </div>
+      <div class="campo">
+        <label for="register-nascimento">Data de nascimento</label>
+        <input type="date" id="register-nascimento" required>
+      </div>
+      <div class="campo">
+        <label for="register-sexo">Sexo</label>
+        <select id="register-sexo" required>
+          <option value="">Selecione...</option>
+          <option value="feminino">Feminino</option>
+          <option value="masculino">Masculino</option>
+          <option value="outro">Outro</option>
+          <option value="prefiro_nao_dizer">Prefiro não dizer</option>
+        </select>
+      </div>
+      <button type="submit" class="register-btn">Registrar</button>
+      <div class="error-msg" id="registerError"></div>
+      <div class="success-msg" id="registerSuccess"></div>
     </form>
   </div>
+  <script>
+    // Troca entre formulários login/registro
+    function showRegister() {
+      document.getElementById('formLogin').style.display = 'none';
+      document.getElementById('formRegister').style.display = 'flex';
+      document.getElementById('tituloForm').innerText = 'Criar Conta';
+      document.getElementById('toggleLink').innerHTML = 'Já é membro? <a onclick="showLogin()">Entrar</a>';
+    }
+    function showLogin() {
+      document.getElementById('formLogin').style.display = 'flex';
+      document.getElementById('formRegister').style.display = 'none';
+      document.getElementById('tituloForm').innerText = 'Entrar';
+      document.getElementById('toggleLink').innerHTML = 'Não tem conta? <a onclick="showRegister()">Registrar-se</a>';
+    }
+    // Guest Login - só redireciona para home como visitante
+    function loginVisitante() {
+      window.location.href = 'index.html';
+    }
+    // Ajax para login/registro (exemplo, precisa ajustar para PHP real depois)
+    document.getElementById('formLogin').onsubmit = function(e) {
+      e.preventDefault();
+
+      // DADOS
+      const email = document.getElementById('login-email').value;
+      const senha = document.getElementById('login-senha').value;
+
+      // AJAX
+      fetch('login.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `email=${encodeURIComponent(email)}&senha=${encodeURIComponent(senha)}`
+      })
+      .then(res => res.json())
+      .then(res => {
+        if (res.success) {
+          window.location.href = 'index.html'; // Troque para a tela de perfil ou dashboard
+        } else {
+          document.getElementById('loginError').style.display = 'block';
+          document.getElementById('loginError').innerText = res.message || 'Email ou senha inválidos.';
+        }
+      })
+      .catch(() => {
+        document.getElementById('loginError').style.display = 'block';
+        document.getElementById('loginError').innerText = 'Erro ao conectar ao servidor: ' + e;
+      });
+    }
+
+    document.getElementById('formRegister').onsubmit = function(e) {
+      e.preventDefault();
+
+      const nome = document.getElementById('register-nome').value;
+      const email = document.getElementById('register-email').value;
+      const telefone = document.getElementById('register-telefone').value;
+      const senha = document.getElementById('register-senha').value;
+      const senha2 = document.getElementById('register-senha2').value;
+      const nascimento = document.getElementById('register-nascimento').value;
+      const sexo = document.getElementById('register-sexo').value;
+
+      if (senha !== senha2) {
+        document.getElementById('registerError').style.display = 'block';
+        document.getElementById('registerError').innerText = 'As senhas não coincidem.';
+        return;
+      }
+
+      // AJAX
+      fetch('register.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `nome=${encodeURIComponent(nome)}&email=${encodeURIComponent(email)}&telefone=${encodeURIComponent(telefone)}&senha=${encodeURIComponent(senha)}&nascimento=${encodeURIComponent(nascimento)}&sexo=${encodeURIComponent(sexo)}`
+      })
+      .then(res => res.json())
+      .then(res => {
+        if (res.success) {
+          document.getElementById('registerSuccess').style.display = 'block';
+          document.getElementById('registerSuccess').innerText = 'Registro bem-sucedido! Agora faça login.';
+          setTimeout(showLogin, 2000);
+        } else {
+          document.getElementById('registerError').style.display = 'block';
+          document.getElementById('registerError').innerText = res.message || 'Erro ao registrar.';
+        }
+      })
+      .catch(() => {
+        document.getElementById('registerError').style.display = 'block';
+        document.getElementById('registerError').innerText = 'Erro ao conectar ao servidor.';
+      });
+    }
+
+    // Social login (placeholder):
+    Array.from(document.querySelectorAll('.social-btn')).forEach(btn => {
+      btn.onclick = function(){
+        alert('Integração com provedor ainda não implementada nesta versão de demonstração.');
+      }
+    });
+  </script>
 </body>
 </html>

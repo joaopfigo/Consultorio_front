@@ -184,15 +184,13 @@
     }
     .perfil-email { color: #444; margin-top: 5px; margin-bottom: 7px; }
     .perfil-editar {
-      background: var(--cor-destaque);
-      color: var(--cor-btn);
-      border: none;
-      border-radius: 7px;
-      padding: 7px 22px;
-      font-size: 0.97rem;
-      font-weight: 700;
-      cursor: pointer;
-      margin-top: 8px;
+      padding: 5px 11px;
+      font-size: 1rem;
+      border-radius: 50%;
+      width: 44px; height: 44px;
+      justify-content: center;
+      align-items: center;
+      display: flex;
     }
     .status-sessoes {
       margin-bottom: 28px;
@@ -334,6 +332,98 @@
       .perfil-container, #detalhe-sessao { max-width: 98vw; padding: 14px 2vw 18px 2vw; }
       .perfil-avatar { width: 80px; height: 80px; }
     }
+    .botao-upload {
+      display: block;
+      background-color: #ede6c6;
+      color: #6A5036;
+      margin: 12px auto 0 auto;
+      padding: 0.5rem 1.1rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .botao-upload:hover {
+      background: #e3ce95;
+    }
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.4);
+      display: flex;  /* O padrão é sumido */
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      max-width: 420px;
+      width: 92vw;
+      box-shadow: 0 0 30px #0004;
+    }
+    .avatar-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 120px;
+    }
+    .perfil-editar, .perfil-logout {
+      margin-right: 12px;
+      margin-top: 14px;
+    }
+    @media (max-width: 700px) {
+      .perfil-editar, .perfil-logout {
+        display: block;
+        margin: 10px 0 0 0;
+        width: 100%;
+      }
+    }
+    #modal-editar { display: none; }
+    .perfil-nome { font-size: 1.45rem; font-weight: 700; color: var(--cor-principal); font-family: 'Playfair Display', serif;}
+    .perfil-email { color: #444; margin: 6px 0 7px 0; font-size: 1.12rem;}
+    #perfil-idade { color: #706c66; font-size: 1.05rem; margin-bottom: 5px;}
+    .perfil-dados { display: flex; flex-direction: column; gap: 2px; }
+    .perfil-acoes {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .perfil-editar, .perfil-logout {
+      background: #f6f2e3;
+      color: var(--cor-principal);
+      border: none;
+      border-radius: 7px;
+      padding: 7px 13px;
+      font-size: 1.23rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.19s;
+      box-shadow: 0 1px 4px #bbb1;
+    }
+    .perfil-editar:hover, .perfil-logout:hover {
+      background: #f7e6bc;
+      color: #634d25;
+    }
+    @media (max-width: 700px) {
+      .perfil-acoes { gap: 7px; }
+      .perfil-editar, .perfil-logout { width: 44px; height: 44px; padding: 0; font-size: 1.12rem; }
+    }
+    .perfil-upload-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      margin: 10px 0 0 0;
+    }
   </style>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
@@ -341,7 +431,7 @@
 <body>
   <nav class="navbar">
     <div class="navbar-logo-central">
-      <img src="logo.png" alt="Consultório de Terapia Corporal Sistêmica" />
+      <img src="img/logo.png" alt="Consultório de Terapia Corporal Sistêmica" />
       <span>Virlene Figueiredo</span>
     </div>
     <button class="navbar-toggle" aria-label="Abrir menu">&#9776;</button>
@@ -352,19 +442,38 @@
       <li><a href="blog.html">Blog</a></li>
       <li><a href="contato.html">Contato</a></li>
       <li><a href="perfil.html"><i class="fa-solid fa-user"></i> Perfil</a></li>
+      <li><a href="registrar.html" onclick="logout()">Sair</a></li>
     </ul>
   </nav>
   <div class="banner-terra">Meu Perfil</div>
 
   <div class="perfil-container" id="perfil-area">
     <div class="perfil-info">
-      <img src="https://randomuser.me/api/portraits/women/68.jpg" class="perfil-avatar" alt="Usuário">
+      <div class="avatar-area">
+        <img src="img/avatar-user.jpg" class="perfil-avatar" alt="Usuário">
+        <label for="upload-foto" class="botao-upload">Carregar imagem</label>
+        <input type="file" id="upload-foto" accept="image/*" style="display: none;">
+        <label for="upload-foto-camera" class="botao-upload">Tirar foto</label>
+        <input type="file" id="upload-foto-camera" accept="image/*" capture="environment" style="display: none;">
+
+      </div>
       <div class="perfil-dados">
-        <div class="perfil-nome" id="perfil-nome">Ana Paula Silva</div>
-        <div class="perfil-email" id="perfil-email">ana.paula@gmail.com</div>
-        <button class="perfil-editar">Editar Dados</button>
+        <p class="perfil-nome" id="perfil-nome">--</p>
+        <p class="perfil-email" id="perfil-email">--</p>
+        <p id="perfil-idade" style="display: none !important;">--</p>
+
+        <div class="perfil-acoes">
+          <button class="perfil-editar" title="Editar dados">
+            <i class="fa-regular fa-pen-to-square"></i>
+          </button>
+          <button class="perfil-logout" onclick="logout()" title="Encerrar sessão">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+
       </div>
     </div>
+
     <div class="status-sessoes" id="status-sessoes">
       <b>Sessão Agendada:</b><br>
       <div class="sessoes-lista" id="proximas-sessoes"></div>
@@ -372,6 +481,42 @@
     <div class="historico-title">Histórico de Consultas</div>
     <div class="sessoes-lista" id="historico-sessoes"></div>
   </div>
+
+  <!-- Modal Editar Perfil -->
+  <div id="modal-editar" class="modal-overlay" style="display:none;">
+    <div class="modal-content">
+      <h3>Editar Perfil</h3>
+      <label>
+        Nome:
+        <input type="text" id="editar-nome">
+      </label><br>
+      <label>
+        Email:
+        <input type="email" id="editar-email">
+      </label><br>
+      <label>
+        Data de nascimento:
+        <input type="date" id="editar-nascimento">
+      </label><br>
+      <label>
+        Telefone:
+        <input type="text" id="editar-telefone">
+      </label><br>
+      <label>
+        Sexo:
+        <select id="editar-sexo">
+          <option value="">Não informar</option>
+          <option value="Feminino">Feminino</option>
+          <option value="Masculino">Masculino</option>
+          <option value="Outro">Outro</option>
+        </select>
+      </label><br>
+      <button onclick="salvarEdicao()">Salvar</button>
+      <button onclick="fecharModal()">Cancelar</button>
+    </div>
+  </div>
+  <div id="feedback-msg" style="display:none;position:fixed;top:12px;left:50%;transform:translateX(-50%);background:#88c275;padding:13px 29px;font-size:1.2rem;color:#fff;border-radius:9px;z-index:99999;box-shadow:0 2px 22px #2224;"></div>
+
 
   <!-- Detalhe da sessão (abre como SPA) -->
   <div id="detalhe-sessao">
@@ -382,84 +527,99 @@
   </div>
 
   <script>
-    // Dados fake para exemplo (substitua por dados dinâmicos depois)
-    const usuario = {
-      nome: "Ana Paula Silva",
-      email: "ana.paula@gmail.com",
-      avatar: "https://randomuser.me/api/portraits/women/68.jpg"
-    };
-    const sessoes = [
-      {
-        id: 1,
-        tratamento: "Massoterapia",
-        data: "2024-06-04 14:00",
-        status: "Confirmada",
-        reclamacao: {
-          sintomas: "Dor lombar intensa ao final do dia.",
-          tempo: "1 a 4 semanas",
-          intensidade: "Moderada",
-          tratamento: "Fisioterapia e analgésico."
-        },
-        anamnese: {
-          geral: "Paciente apresenta melhora de 60% após sessões anteriores. Reforçar alongamentos e avaliar resposta à ventosa.",
-          orientacoes: "Evitar levantar peso. Realizar alongamento 2x ao dia."
-        },
-        visualizada: true
-      },
-      {
-        id: 2,
-        tratamento: "Quick Massage",
-        data: "2024-06-11 11:00",
-        status: "Pendente",
-        reclamacao: null,
-        anamnese: null,
-        visualizada: false
-      },
-      {
-        id: 3,
-        tratamento: "Reflexologia Podal",
-        data: "2024-05-21 17:30",
-        status: "Cancelada",
-        reclamacao: {
-          sintomas: "Fadiga e dores nos pés.",
-          tempo: "Mais de 6 meses",
-          intensidade: "Leve",
-          tratamento: "Uso de palmilha ortopédica."
-        },
-        anamnese: {
-          geral: "Paciente relata melhora parcial. Recomendado retorno em 30 dias.",
-          orientacoes: "Manter uso da palmilha e iniciar hidroginástica."
-        },
-        visualizada: true
-      }
-    ];
-
+    let sessoes = [];
+    let usuario = {};
     // Preenche dados usuário
-    document.getElementById('perfil-nome').innerText = usuario.nome;
-    document.getElementById('perfil-email').innerText = usuario.email;
-    document.querySelector('.perfil-avatar').src = usuario.avatar;
+    fetch("getPerfil.php")
+      .then(res => res.json())
+      .then(data => {
+        usuario = data.usuario;
+
+        document.querySelector("#perfil-nome").textContent = usuario.nome || "";
+        document.querySelector("#perfil-email").textContent = usuario.email || "";
+        document.querySelector(".perfil-avatar").src = usuario.foto || "img/avatar-user.jpg";
+        if (usuario.nascimento) {
+          const nascimento = new Date(usuario.nascimento);
+          const hoje = new Date();
+          let idade = hoje.getFullYear() - nascimento.getFullYear();
+          if (
+            hoje.getMonth() < nascimento.getMonth() ||
+            (hoje.getMonth() === nascimento.getMonth() && hoje.getDate() < nascimento.getDate())
+          ) {
+            idade--;
+          }
+          document.getElementById("perfil-idade").textContent = idade + " anos";
+        } else {
+          document.getElementById("perfil-idade").textContent = "--";
+        }
+
+        const sessoes = data.sessoes;
+        renderProximasSessoes(sessoes);
+        renderHistoricoSessoes(sessoes);
+        const divProximas = document.getElementById("proximas-sessoes");
+        const divHistorico = document.getElementById("historico-sessoes");
+        divProximas.innerHTML = "";
+        divHistorico.innerHTML = "";
+
+        if (!sessoes.some(sessao => {
+            const data = new Date(sessao.data_horario || sessao.data || sessao.data_inicio);
+            return data > new Date();
+        })) {
+          document.getElementById("proximas-sessoes").innerHTML = `
+            <p>Nenhuma sessão agendada.<br>
+            <a href="agendamento.html" style="color:#b48c1a;text-decoration:underline;cursor:pointer;">Clique aqui para agendar uma consulta.</a>
+            </p>`;
+        }
+        
+
+        sessoes.forEach(sessao => {
+          const data = new Date(sessao.data_horario);
+          const agora = new Date();
+          const destino = data > agora ? divProximas : divHistorico;
+
+          const card = document.createElement("div");
+          card.classList.add("sessao-card");
+          card.innerHTML = `
+            <b>${sessao.tratamento}</b><br>
+            ${data.toLocaleString()} - ${sessao.duracao} min
+            ${sessao.status ? `<br>Status: ${sessao.status}` : ""}
+            ${sessao.reclamacao ? `<br><small>Queixa: ${sessao.reclamacao.sintomas} (${sessao.reclamacao.intensidade})</small>` : ""}
+            ${sessao.anamnese ? `<br><small>Anamnese: ${sessao.anamnese.geral}</small>` : ""}
+          `;
+          destino.appendChild(card);
+        });
+      })
+      .catch(err => console.error("Erro ao carregar perfil:", err));
 
     // Próximas sessões (só mostra as não concluídas/canceladas)
-    function renderProximasSessoes() {
+    function renderProximasSessoes(listaSessoes = sessoes) {
       const lista = document.getElementById('proximas-sessoes');
       lista.innerHTML = '';
-      const futuras = sessoes.filter(s => s.status !== 'Cancelada' && new Date(s.data) >= new Date());
+      // Verifica sessões futuras
+      const futuras = (listaSessoes || []).filter(s =>
+        s.status !== 'Cancelada' &&
+        new Date(s.data_horario || s.data || s.data_inicio) >= new Date()
+      );
       if (!futuras.length) {
-        lista.innerHTML = '<div class="nenhuma-sessao">Nenhuma sessão futura agendada.</div>';
+        lista.innerHTML = `
+          <p>Nenhuma sessão agendada.<br>
+          <a href="agendamento.html" style="color:#b48c1a;text-decoration:underline;cursor:pointer;">Clique aqui para agendar uma consulta.</a>
+          </p>
+        `;
         return;
       }
       futuras.forEach(sessao => {
+        const data = new Date(sessao.data_horario || sessao.data || sessao.data_inicio);
         lista.innerHTML += `<div class="sessao-card" onclick="abrirSessao(${sessao.id})">
           <div class="sessao-info">
             <div class="sessao-tratamento">${sessao.tratamento}</div>
-            <div class="sessao-data">${formataData(sessao.data)}</div>
+            <div class="sessao-data">${formataData(data.toISOString().slice(0,16).replace('T', ' '))}</div>
             <span class="sessao-status ${statusClass(sessao.status)}">${sessao.status}</span>
             ${sessao.anamnese && !sessao.visualizada ? '<span class="icon-anamnese" title="Anamnese disponível!">&#128196;</span>' : ''}
           </div>
         </div>`;
       });
     }
-
     // Histórico de sessões (todas, exceto futuras agendadas)
     function renderHistoricoSessoes() {
       const lista = document.getElementById('historico-sessoes');
@@ -532,13 +692,9 @@
     function voltarParaPerfil() {
       document.getElementById('detalhe-sessao').style.display = 'none';
       document.getElementById('perfil-area').style.display = 'block';
-      renderProximasSessoes();
-      renderHistoricoSessoes();
+      renderProximasSessoes(sessoes);
+      renderHistoricoSessoes(sessoes);
     }
-
-    // Inicialização
-    renderProximasSessoes();
-    renderHistoricoSessoes();
 
         // Menu responsivo sanduíche
     const navbarToggle = document.querySelector('.navbar-toggle');
@@ -552,6 +708,136 @@
         navbarMenu.classList.remove('open');
       });
     });
+
+    function uploadFotoPerfil(input) {
+      const file = input.files[0];
+      if (!file) return;
+
+      // Mostra preview imediato
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        document.querySelector('.perfil-avatar').src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+
+      // Redimensiona e envia para backend
+      const img = new Image();
+      img.onload = function () {
+        const canvas = document.createElement('canvas');
+        const max = 320;
+        let w = img.width, h = img.height;
+        if (w > h && w > max) { h *= max / w; w = max; }
+        else if (h > w && h > max) { w *= max / h; h = max; }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        canvas.toBlob(blob => {
+          const formData = new FormData();
+          formData.append('foto', blob, file.name);
+          fetch('uploadFoto.php', { method: 'POST', body: formData })
+            .then(res => res.json())
+            .then(data => {
+              if (data.sucesso) {
+                document.querySelector('.perfil-avatar').src = data.foto + '?v=' + Date.now();
+                showFeedback('Foto de perfil atualizada com sucesso!');
+              } else {
+                showFeedback('Erro ao enviar a foto', true);
+              }
+            });
+        }, 'image/jpeg', 0.84);
+      };
+      img.src = URL.createObjectURL(file);
+    }
+
+
+    // Eventos
+    document.getElementById('upload-foto').addEventListener('change', function() { uploadFotoPerfil(this); });
+    document.getElementById('upload-foto-camera').addEventListener('change', function() { uploadFotoPerfil(this); });
+
+
+    document.querySelector('.perfil-editar').addEventListener('click', () => {
+      document.getElementById('modal-editar').style.display = 'flex';
+      document.getElementById('editar-nome').value = usuario.nome || "";
+      document.getElementById('editar-email').value = usuario.email || "";
+      document.getElementById('editar-nascimento').value = usuario.nascimento || "";
+      document.getElementById('editar-telefone').value = usuario.telefone || "";
+      document.getElementById('editar-sexo').value = usuario.sexo || "";
+    });
+
+
+    // Para fechar o modal
+    function fecharModal() {
+      document.getElementById('modal-editar').style.display = 'none';
+    }
+
+
+    function salvarEdicao() {
+      const formData = new FormData();
+      formData.append('nome', document.getElementById('editar-nome').value);
+      formData.append('email', document.getElementById('editar-email').value);
+      formData.append('telefone', document.getElementById('editar-telefone').value);
+      formData.append('nascimento', document.getElementById('editar-nascimento').value); // Certo: nascimento
+      formData.append('sexo', document.getElementById('editar-sexo').value);
+
+      fetch('atualizarPerfil.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.sucesso) {
+          fecharModal();
+          // Atualiza imediatamente os campos visuais
+          document.getElementById("perfil-nome").textContent = document.getElementById('editar-nome').value;
+          document.getElementById("perfil-email").textContent = document.getElementById('editar-email').value;
+
+          // Atualiza idade
+          const nasc = document.getElementById('editar-nascimento').value;
+          if (nasc) {
+            const nascimento = new Date(nasc);
+            const hoje = new Date();
+            let idade = hoje.getFullYear() - nascimento.getFullYear();
+            if (
+              hoje.getMonth() < nascimento.getMonth() ||
+              (hoje.getMonth() === nascimento.getMonth() && hoje.getDate() < nascimento.getDate())
+            ) {
+              idade--;
+            }
+            document.getElementById("perfil-idade").textContent = idade + " anos";
+          } else {
+            document.getElementById("perfil-idade").textContent = "--";
+          }
+
+          // Atualiza o objeto usuario (sincroniza sexo etc.)
+          usuario.nome = document.getElementById('editar-nome').value;
+          usuario.email = document.getElementById('editar-email').value;
+          usuario.telefone = document.getElementById('editar-telefone').value;
+          usuario.nascimento = nasc;
+          usuario.sexo = document.getElementById('editar-sexo').value;
+
+          showFeedback("Dados salvos com sucesso!");
+        } else {
+          showFeedback("Erro ao salvar!", true);
+        }
+      });
+    }
+
+    function showFeedback(msg, erro = false) {
+      let el = document.getElementById('feedback-msg');
+      if (!el) {
+        el = document.createElement('div');
+        el.id = 'feedback-msg';
+        el.style.cssText = 'display:none;position:fixed;top:15px;left:50%;transform:translateX(-50%);background:#3b9855;padding:14px 32px;font-size:1.1rem;color:#fff;border-radius:8px;z-index:99999;box-shadow:0 3px 20px #2225;';
+        document.body.appendChild(el);
+      }
+      el.textContent = msg;
+      el.style.background = erro ? '#c33' : '#3b9855';
+      el.style.display = 'block';
+      setTimeout(() => { el.style.display = 'none'; }, 2100);
+    }
+    function logout() {
+      fetch("logout.php")
+        .then(() => window.location.href = "registrar.html");
+    }
   </script>
 </body>
 </html>

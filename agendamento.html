@@ -176,7 +176,7 @@
     }
     .treatments {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, 1fr) !important;
       gap: 14px 20px;
       margin-bottom: 7px;
     }
@@ -340,7 +340,6 @@
     }
     @media (max-width: 800px) {
       .container { padding: 10px 1vw 14px 1vw; max-width: 98vw; }
-      .treatments { grid-template-columns: 1fr; gap: 10px 8px; }
     }
      .form-btn-area {
       text-align: right;
@@ -376,6 +375,50 @@
       .form-btn-area { text-align: center; }
       .btn-voltar { margin-bottom: 10px; }
     }
+    #aviso-tratamento-toast {
+      position: fixed;
+      left: 50%;
+      z-index: 9999;
+      background: linear-gradient(90deg, #4466b3 0%, #36c 100%);
+      color: #fff;
+      font-size: 1.08rem;
+      font-weight: 600;
+      padding: 13px 28px;
+      border-radius: 18px;
+      box-shadow: 0 3px 16px rgba(44,76,180,0.19);
+      opacity: 0;
+      transition: opacity 0.45s, top 0.24s;
+      pointer-events: none;
+      text-align: center;
+      min-width: 210px;
+      max-width: 95vw;
+    }
+    #aviso-tratamento-toast.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    @media (max-width: 700px) {
+      #aviso-tratamento-toast {
+        top: 10px !important;
+        left: 50% !important;
+        right: auto;
+        bottom: auto !important;
+        transform: translateX(-50%);
+        font-size: 1.02rem;
+        padding: 11px 14vw;
+      }
+    }
+    .treatment.block-hover:not(.selected):hover,
+.treatment.block-hover:not(.selected):active,
+.treatment.block-hover:not(.selected):focus {
+  background: inherit !important;
+  box-shadow: none !important;
+  border-color: #ddd !important;
+  color: inherit !important;
+  filter: none !important;
+  outline: none !important;
+  cursor: not-allowed !important;
+}
   </style>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
@@ -383,7 +426,7 @@
 <body>
   <nav class="navbar">
     <div class="navbar-logo-central">
-      <img src="logo.png" alt="Consultório de Terapia Corporal Sistêmica" />
+      <img src="img/logo.png" alt="Consultório de Terapia Corporal Sistêmica" />
       <span>Virlene Figueiredo</span>
     </div>
     <button class="navbar-toggle" aria-label="Abrir menu">&#9776;</button>
@@ -410,7 +453,7 @@
           <label for="principal_desconforto">Descreva seu principal desconforto ou dor:</label>
           <textarea id="principal_desconforto" name="principal_desconforto" rows="3"></textarea>
 
-          <label for="queixa_secundaria">Descreva a queixa secundária:</label>
+          <label for="queixa_secundaria">Caso tenha outras queixas, descreva aqui:</label>
           <textarea id="queixa_secundaria" name="queixa_secundaria" rows="2"></textarea>
 
           <label for="tempo_desconforto">Há quanto tempo sente esse desconforto?</label>
@@ -439,8 +482,8 @@
             <label><input type="checkbox" name="check11"> Dores em outras partes do corpo (quais)</label>
             <label><input type="checkbox" name="check12"> Cirurgias recentes ou passadas</label>
             <label><input type="checkbox" name="check13"> Problemas de pele/couro cabeludo</label>
-            <label><input type="checkbox" name="check14"> Digestão (azia, refluxo, gastrite)</label>
-            <label><input type="checkbox" name="check15"> Intestino</label>
+            <label><input type="checkbox" name="check14"> Indigestão (azia, refluxo, gastrite)</label>
+            <label><input type="checkbox" name="check15"> Problemas intestinais</label>
             <label><input type="checkbox" name="check16"> Prisão de Ventre/Diarreia</label>
             <label><input type="checkbox" name="check17"> Má circulação</label>
             <label><input type="checkbox" name="check18"> Trombose</label>
@@ -451,12 +494,12 @@
             <label><input type="checkbox" name="check23"> Alergias</label>
             <label><input type="checkbox" name="check24"> Rinite/Sinusite</label>
             <label><input type="checkbox" name="check25"> Diabetes</label>
-            <label><input type="checkbox" name="check26"> Colesterol</label>
+            <label><input type="checkbox" name="check26"> Colesterol alto</label>
             <label><input type="checkbox" name="check27"> Epilepsia</label>
             <label><input type="checkbox" name="check28"> Osteoporose</label>
             <label><input type="checkbox" name="check29"> Câncer</label>
             <label><input type="checkbox" name="check30"> Doença contagiosa ou infecciosa</label>
-            <label><input type="checkbox" name="check31"> Sono (como é)</label>
+            <label><input type="checkbox" name="check31"> Sono constante</label>
           </div>
         </div>
 
@@ -542,47 +585,47 @@
     </div>
     <div id="formulario-feedback" class="step" style="display:none; text-align:center;">
       <h2 style="color:#30795b;">Resposta salva!</h2>
-      <p style="margin-bottom:18px;">Seu formulário de queixas foi salvo com sucesso.<br>Pode editar sempre que desejar antes de finalizar o agendamento.</p>
+      <p style="margin-bottom:18px;">Seu formulário d,e queixas foi salvo com sucesso.<br>Pode editar sempre que desejar antes de finalizar o agendamento.</p>
       <button class="btn-form" id="btn-editar-formulario">Editar resposta</button>
     </div>
 
     <div class="step" id="step-tratamento">
-      <h2>2. Escolha qual tratamento deseja realizar</h2>
-<div class="treatments">
-  <div class="treatment">
-    <img src="https://images.pexels.com/photos/3822622/pexels-photo-3822622.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Quick Massage">
-    <span>Quick Massage</span>
-  </div>
-  <div class="treatment">
-    <img src="https://images.pexels.com/photos/3997985/pexels-photo-3997985.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Massoterapia">
-    <span>Massoterapia</span>
-  </div>
-  <div class="treatment">
-    <img src="https://images.pexels.com/photos/3182811/pexels-photo-3182811.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Reflexologia Podal">
-    <span>Reflexologia Podal</span>
-  </div>
-  <div class="treatment">
-    <img src="https://images.pexels.com/photos/6621319/pexels-photo-6621319.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Auriculoterapia">
-    <span>Auriculoterapia</span>
-  </div>
-  <div class="treatment">
-    <img src="https://images.pexels.com/photos/3757942/pexels-photo-3757942.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Ventosa">
-    <span>Ventosa</span>
-  </div>
-  <div class="treatment">
-    <img src="https://images.pexels.com/photos/161599/massage-therapy-acupuncture-161599.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Acupuntura">
-    <span>Acupuntura</span>
-  </div>
-  <div class="treatment">
-    <img src="https://images.pexels.com/photos/4058218/pexels-photo-4058218.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Biomagnetismo">
-    <span>Biomagnetismo</span>
-  </div>
-  <div class="treatment">
-    <img src="https://images.pexels.com/photos/3759657/pexels-photo-3759657.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Reiki">
-    <span>Reiki</span>
-  </div>
-</div>
-
+      <h2>2. Escolha o(s) tratamento(s) que deseja realizar (no máximo dois):</h2>
+      <div class="treatments">
+        <div class="treatment">
+          <img src="https://images.pexels.com/photos/3822622/pexels-photo-3822622.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Quick Massage">
+          <span>Quick Massage</span>
+        </div>
+        <div class="treatment">
+          <img src="https://images.pexels.com/photos/3997985/pexels-photo-3997985.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Massoterapia">
+          <span>Massoterapia</span>
+        </div>
+        <div class="treatment">
+          <img src="https://images.pexels.com/photos/3182811/pexels-photo-3182811.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Reflexologia Podal">
+          <span>Reflexologia Podal</span>
+        </div>
+        <div class="treatment">
+          <img src="https://images.pexels.com/photos/6621319/pexels-photo-6621319.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Auriculoterapia">
+          <span>Auriculoterapia</span>
+        </div>
+        <div class="treatment">
+          <img src="https://images.pexels.com/photos/3757942/pexels-photo-3757942.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Ventosa">
+          <span>Ventosa</span>
+        </div>
+        <div class="treatment">
+          <img src="https://images.pexels.com/photos/161599/massage-therapy-acupuncture-161599.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Acupuntura">
+          <span>Acupuntura</span>
+        </div>
+        <div class="treatment">
+          <img src="https://images.pexels.com/photos/4058218/pexels-photo-4058218.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Biomagnetismo">
+          <span>Biomagnetismo</span>
+        </div>
+        <div class="treatment">
+          <img src="https://images.pexels.com/photos/3759657/pexels-photo-3759657.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Reiki">
+          <span>Reiki</span>
+        </div>
+      </div>
+      <div id="aviso-tratamento" style="display:none; margin-top:10px; color:#d9534f; font-weight:600; text-align:center;"></div>
 
     </div>
     <div class="step" id="step-duracao">
@@ -746,39 +789,104 @@ function renderSlots(val){
     slotsArea.appendChild(el);
   });
 }
-const now = new Date();
-renderCalendar(now.getFullYear(), now.getMonth());
-    const usuarioLogado = true;
-    document.getElementById('dados-usuario').style.display = usuarioLogado ? '' : 'none';
-    document.getElementById('dados-guest').style.display = usuarioLogado ? 'none' : '';
+  const now = new Date();
+  renderCalendar(now.getFullYear(), now.getMonth());
+      const usuarioLogado = true;
+      document.getElementById('dados-usuario').style.display = usuarioLogado ? '' : 'none';
+      document.getElementById('dados-guest').style.display = usuarioLogado ? 'none' : '';
 
-    document.getElementById('btn-agendar').onclick = function(e) {
-    // Validação básica
-    const duracao = document.querySelector('input[name="duracao"]:checked');
-    const slot = document.querySelector('.slot.selected');
-    let guestValid = true;
-    if (document.getElementById('dados-guest').style.display !== 'none') {
-      guestValid = [...document.querySelectorAll('#dados-guest input[required]')].every(f=>f.value.trim()!=="");
+      document.getElementById('btn-agendar').onclick = function(e) {
+      // Validação básica
+      const duracao = document.querySelector('input[name="duracao"]:checked');
+      const slot = document.querySelector('.slot.selected');
+      let guestValid = true;
+      if (document.getElementById('dados-guest').style.display !== 'none') {
+        guestValid = [...document.querySelectorAll('#dados-guest input[required]')].every(f=>f.value.trim()!=="");
+      }
+      if (duracao && slot && guestValid) {
+        document.getElementById('agendamento-container').style.display = 'none';
+        document.getElementById('success-container').style.display = 'flex';
+        window.scrollTo({top:0});
+      } else {
+        alert('Preencha todos os campos obrigatórios para agendar a sessão.');
+      }
+
+    };
+    
+  function mostrarAvisoTratamento(msg) {
+    let aviso = document.getElementById('aviso-tratamento-toast');
+    if (!aviso) {
+      aviso = document.createElement('div');
+      aviso.id = 'aviso-tratamento-toast';
+      aviso.className = 'aviso-tratamento-toast';
+      document.body.appendChild(aviso);
     }
-    if (duracao && slot && guestValid) {
-      document.getElementById('agendamento-container').style.display = 'none';
-      document.getElementById('success-container').style.display = 'flex';
-      window.scrollTo({top:0});
+    aviso.innerHTML = msg;
+    aviso.classList.add('show');
+    aviso.style.display = "block";
+    // Mobile: gruda no topo, Desktop: mantém no centro inferior
+    if (window.innerWidth < 700) {
+      aviso.style.top = '10px';
+      aviso.style.bottom = '';
+      aviso.style.left = '50%';
+      aviso.style.transform = 'translateX(-50%)';
     } else {
-      alert('Preencha todos os campos obrigatórios para agendar a sessão.');
+      aviso.style.top = '';
+      aviso.style.bottom = '8vh';
+      aviso.style.left = '50%';
+      aviso.style.transform = 'translateX(-50%)';
     }
+    // Fade-out automático:
+    setTimeout(() => {
+      aviso.classList.remove('show');
+      setTimeout(() => { aviso.style.display = "none"; }, 450);
+    }, 2500);
+  }
 
-  };
+// Lógica robusta para seleção de até dois tratamentos
+function atualizarHoverBloqueado() {
+  const selected = document.querySelectorAll('.treatment.selected');
+  const treatments = document.querySelectorAll('.treatment');
+  if (selected.length >= 2) {
+    treatments.forEach(card => {
+      if (!card.classList.contains('selected')) {
+        card.classList.add('block-hover');
+      }
+    });
+  } else {
+    treatments.forEach(card => {
+      card.classList.remove('block-hover');
+    });
+  }
+}
 
-  // Seleção visual dos tratamentos (adicione se ainda não tem)
-  document.querySelectorAll('.treatment').forEach(card => {
-    card.onclick = function() {
-      document.querySelectorAll('.treatment').forEach(c=>c.classList.remove('selected'));
-      this.classList.add('selected');
+// E, após cada clique, sempre rode:
+document.querySelectorAll('.treatment').forEach(card => {
+  card.addEventListener('click', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const selected = document.querySelectorAll('.treatment.selected');
+    if (this.classList.contains('selected')) {
+      this.classList.remove('selected');
+      atualizarHoverBloqueado();
+      return;
     }
-  });
+    if (selected.length >= 2) {
+      mostrarAvisoTratamento(
+        "Você só pode escolher até dois tratamentos.<br><span style='font-size:0.98em;font-weight:400;'>Para escolher outro, primeiro retire uma das opções já selecionadas.</span>"
+      );
+      atualizarHoverBloqueado();
+      return;
+    }
+    this.classList.add('selected');
+    atualizarHoverBloqueado();
+  }, {passive: false});
+});
 
-      // Menu responsivo sanduíche
+
+
+    // Menu responsivo sanduíche
     const navbarToggle = document.querySelector('.navbar-toggle');
     const navbarMenu = document.querySelector('.navbar-menu');
     navbarToggle.addEventListener('click', () => {
@@ -789,6 +897,30 @@ renderCalendar(now.getFullYear(), now.getMonth());
       link.addEventListener('click', () => {
         navbarMenu.classList.remove('open');
       });
+    });
+
+    window.addEventListener('DOMContentLoaded', function() {
+      const servicoEscolhido = localStorage.getItem('servicoSelecionado');
+      if (servicoEscolhido) {
+        // Considerando que cada tratamento tem um radio input ou card com texto igual ao nome do serviço
+        document.querySelectorAll('.treatment, .tratamento, .servico-opcao, label').forEach(el => {
+          if (
+            el.innerText &&
+            el.innerText.trim().toLowerCase() === servicoEscolhido.trim().toLowerCase()
+          ) {
+            // Caso seja radio:
+            if (el.querySelector('input[type="radio"]')) {
+              el.querySelector('input[type="radio"]').checked = true;
+            }
+            // Se for um card ou div que você usa para marcar visualmente:
+            el.classList.add('selected');
+            // Rola para o tratamento
+            el.scrollIntoView({behavior: 'smooth', block: 'center'});
+          }
+        });
+        // Limpa o LocalStorage para não afetar próximos acessos
+        localStorage.removeItem('servicoSelecionado');
+      }
     });
   </script>
 </body>

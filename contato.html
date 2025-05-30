@@ -222,7 +222,7 @@
 <body>
   <nav class="navbar">
     <div class="navbar-logo-central">
-      <img src="logo.png" alt="Consultório de Terapia Corporal Sistêmica" />
+      <img src="img/logo.png" alt="Consultório de Terapia Corporal Sistêmica" />
       <span>Virlene Figueiredo</span>
     </div>
     <button class="navbar-toggle" aria-label="Abrir menu">&#9776;</button>
@@ -242,9 +242,9 @@
       <div class="contato-info">
         <b>Telefone:</b> <a href="tel:+5531999887766" style="color:inherit; text-decoration:underline;">(31) 99988-7766</a><br>
         <b>WhatsApp:</b>
-        <a href="https://wa.me/5531999887766" class="whatsapp-btn" target="_blank">
-          <span class="whatsapp-icon">&#x1F4F2;</span> Fale no WhatsApp
-        </a>
+          <a href="https://wa.me/5531999887766?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20consulta%21" class="whatsapp-btn" target="_blank">
+            <span class="whatsapp-icon">&#x1F4F2;</span> Fale no WhatsApp
+          </a>
       </div>
     </div>
     <hr class="contato-divider">
@@ -258,25 +258,56 @@
     <div id="contato-msg"></div>
   </div>
   <script>
-    // Exemplo: usuário logado (simulação, pode integrar backend)
-    const usuarioLogado = {
-      nome: "Ana Paula Silva",
-      email: "ana.paula@gmail.com"
-    };
-    // Se o usuário está logado, pré-preenche e bloqueia os campos
+    // Busca dados reais do usuário logado
     window.onload = function() {
-      if (usuarioLogado) {
-        document.getElementById('nome').value = usuarioLogado.nome;
-        document.getElementById('email').value = usuarioLogado.email;
-        document.getElementById('nome').setAttribute('readonly', true);
-        document.getElementById('email').setAttribute('readonly', true);
-      }
+      fetch('getPerfil.php')
+        .then(res => res.json())
+        .then(data => {
+          if (data.usuario && data.usuario.nome && data.usuario.email) {
+            document.getElementById('nome').value = data.usuario.nome;
+            document.getElementById('email').value = data.usuario.email;
+            document.getElementById('nome').setAttribute('readonly', true);
+            document.getElementById('email').setAttribute('readonly', true);
+          }
+        })
+        .catch(() => { /* se não logado, campos permanecem livres */ });
     };
+
     function enviarContato(e) {
       e.preventDefault();
-      document.getElementById('form-contato').style.display = 'none';
-      document.getElementById('contato-msg').innerHTML = '<div class="msg-enviada">Mensagem enviada com sucesso! Em breve entraremos em contato pelo WhatsApp ou e-mail informado.</div>';
+
+      const nome = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const mensagem = document.getElementById('mensagem').value.trim();
+
+      // Validação extra (opcional)
+      if (!nome || !email || !mensagem) {
+        document.getElementById('contato-msg').innerHTML = "<div class='msg-enviada' style='color:#b32d2d;background:#fde0e0;'>Preencha todos os campos obrigatórios.</div>";
+        return;
+      }
+
+      // Envia para o PHP
+      fetch('contato.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `nome=${encodeURIComponent(nome)}&email=${encodeURIComponent(email)}&mensagem=${encodeURIComponent(mensagem)}`
+      })
+      .then(res => res.text())
+      .then(resposta => {
+        document.getElementById('form-contato').style.display = 'none';
+        if (resposta.trim() === "SUCESSO") {
+          document.getElementById('contato-msg').innerHTML = '<div class="msg-enviada">Mensagem enviada com sucesso! Em breve entraremos em contato pelo WhatsApp ou e-mail informado.</div>';
+        } else {
+          document.getElementById('contato-msg').innerHTML = '<div class="msg-enviada" style="color:#b32d2d;background:#fde0e0;">Erro ao enviar mensagem. Tente novamente mais tarde.</div>';
+          document.getElementById('form-contato').style.display = '';
+        }
+      })
+      .catch(() => {
+        document.getElementById('contato-msg').innerHTML = '<div class="msg-enviada" style="color:#b32d2d;background:#fde0e0;">Erro de conexão. Tente novamente.</div>';
+        document.getElementById('form-contato').style.display = '';
+      });
     }
+
         // Menu responsivo sanduíche
     const navbarToggle = document.querySelector('.navbar-toggle');
     const navbarMenu = document.querySelector('.navbar-menu');
