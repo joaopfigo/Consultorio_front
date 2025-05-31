@@ -609,19 +609,19 @@
           <span>Auriculoterapia</span>
         </div>
         <div class="treatment">
-          <img src="https://images.pexels.com/photos/3757942/pexels-photo-3757942.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Ventosa">
+          <img src="img/ve" alt="Ventosa">
           <span>Ventosa</span>
         </div>
         <div class="treatment">
-          <img src="https://images.pexels.com/photos/161599/massage-therapy-acupuncture-161599.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Acupuntura">
+          <img src="img/acupuntura.jpg" alt="Acupuntura">
           <span>Acupuntura</span>
         </div>
         <div class="treatment">
-          <img src="https://images.pexels.com/photos/4058218/pexels-photo-4058218.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Biomagnetismo">
+          <img src="img/biomagnetismo.png" alt="Biomagnetismo">
           <span>Biomagnetismo</span>
         </div>
         <div class="treatment">
-          <img src="https://images.pexels.com/photos/3759657/pexels-photo-3759657.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Reiki">
+          <img src="img/reiki.jpg" alt="Reiki">
           <span>Reiki</span>
         </div>
       </div>
@@ -631,30 +631,25 @@
     <div class="step" id="step-duracao">
       <h2>3. Duração</h2>
       <div class="durations">
-        <label><input type="radio" name="duracao" checked> 50 minutos - R$ 114,00</label>
-        <label><input type="radio" name="duracao"> 75 minutos - R$ 160,00</label>
-        <label><input type="radio" name="duracao"> 90 minutos - R$ 185,00</label>
-        <label><input type="radio" name="duracao"> 120 minutos - R$ 292,00</label>
-        <label><input type="radio" name="duracao"> 190 minutos - R$ 390,00</label>
+        <label>
+          <input type="radio" name="duracao" value="150" checked>
+          50 minutos - R$ 150,00
+        </label>
+        <label>
+          <input type="radio" name="duracao" value="200">
+          90 minutos - R$ 200,00
+        </label>
       </div>
+
+
       <div class="promo">
-        <h3>PROMOÇÃO: APROVEITE E ACRESCENTE UMA SESSÃO DE REFLEXO!</h3>
-        <div class="combo">
-          <label><input type="radio" name="reflexo" checked> Não tenho interesse</label>
-          <label><input type="radio" name="reflexo"> 20 minutos - R$ 71,00</label>
-          <label><input type="radio" name="reflexo"> 30 minutos - R$ 84,00</label>
-          <label><input type="radio" name="reflexo"> 50 minutos - R$ 100,00</label>
-          <label><input type="radio" name="reflexo"> 60 minutos - R$ 135,00</label>
-        </div>
-      </div>
-      <div class="promo">
-        <h3>PROMOÇÃO: APROVEITE E ACRESCENTE UMA SESSÃO DE AURICULO!</h3>
-        <div class="combo">
-          <label><input type="radio" name="auriculo" checked> Não tenho interesse</label>
-          <label><input type="radio" name="auriculo"> 10 minutos - R$ 48,00</label>
-        </div>
-      </div>
-    </div>
+  <h3>PROMOÇÃO: ACRESCENTE UM ESCALDA PÉS!</h3>
+  <div class="combo">
+    <label>
+      <input type="checkbox" id="escalda-pes" name="escalda-pes"> Quero adicionar escalda pés (+ R$ 60,00)
+    </label>
+  </div>
+</div>
 <div class="step" id="step-horario">
   <h2>4. Escolha a data e o horário</h2>
   <div class="calendar-section">
@@ -687,6 +682,12 @@
         </div>
       </div>
     </div>
+    <div class="total-container" style="margin-top:20px;">
+      <strong>Valor total da sessão: R$ <span id="valor-total">[valor padrão]</span></strong>
+     <br>
+     <small>O pagamento deve ser feito no dia da consulta através de pix, dinheiro, cartão de crédito ou débito.</small>
+    </div>
+
     <button id="btn-agendar" class="btn-continue" style="margin:38px auto 0 auto; display:block; width:220px;">Agendar Sessão</button>
   </div>
   
@@ -923,5 +924,27 @@ document.querySelectorAll('.treatment').forEach(card => {
       }
     });
   </script>
+  
+
+<script>
+  function getValorSessao() {
+    const radio = document.querySelector('input[name="duracao"]:checked');
+    return radio ? parseFloat(radio.value) : 0;
+  }
+
+  function atualizarTotal() {
+    let valorSessao = getValorSessao();
+    let valorEscaldaPes = document.getElementById('escalda-pes').checked ? 60 : 0;
+    let valorTotal = valorSessao + valorEscaldaPes;
+    document.getElementById('valor-total').textContent = valorTotal.toFixed(2).replace('.', ',');
+  }
+
+  document.querySelectorAll('input[name="duracao"]').forEach(function(radio) {
+    radio.addEventListener('change', atualizarTotal);
+  });
+  document.getElementById('escalda-pes').addEventListener('change', atualizarTotal);
+
+  atualizarTotal();
+</script>
 </body>
 </html>
