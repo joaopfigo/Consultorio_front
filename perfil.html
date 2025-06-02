@@ -441,7 +441,7 @@
       <li><a href="servicos.html">Serviços</a></li>
       <li><a href="blog.html">Blog</a></li>
       <li><a href="contato.html">Contato</a></li>
-      <li><a href="perfil.html"><i class="fa-solid fa-user"></i> Perfil</a></li>
+      <li id="li-perfil-login"><a href="registrar.html"><i class="fa-solid fa-user"></i> Login</a></li>
       <li><a href="registrar.html" onclick="logout()">Sair</a></li>
     </ul>
   </nav>
@@ -473,7 +473,7 @@
 
       </div>
     </div>
-
+    <div id="pacote-info" style="margin-bottom:22px;font-size:1.14rem;color:#7a650f;"></div>
     <div class="status-sessoes" id="status-sessoes">
       <b>Sessão Agendada:</b><br>
       <div class="sessoes-lista" id="proximas-sessoes"></div>
@@ -551,6 +551,15 @@
           document.getElementById("perfil-idade").textContent = idade + " anos";
         } else {
           document.getElementById("perfil-idade").textContent = "--";
+        }
+
+        const pacote = data.pacote;
+        if (pacote && pacote.total > 0) {
+          document.getElementById('pacote-info').innerHTML =
+            `Você possui <b>${pacote.disponiveis}</b> de ${pacote.total} sessões do pacote disponíveis.`;
+        } else {
+          document.getElementById('pacote-info').innerHTML =
+            `Você não possui pacotes ativos. <a href="pacotes.html" style="color:#b48c1a;text-decoration:underline;">Clique aqui para comprar um pacote.</a>`;
         }
 
         const sessoes = data.sessoes;
@@ -838,6 +847,18 @@
       fetch("logout.php")
         .then(() => window.location.href = "registrar.html");
     }
+    // Mostra pacote de sessões
+// Mostra pacote de sessões do usuário (consultando no backend)
+fetch('getPacoteUsuario.php')
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById('pacote-info').innerHTML = 
+      data.sessoes_restantes > 0
+        ? `<b>Você tem ${data.sessoes_restantes} sessão(ões) de pacote disponível(is).</b>`
+        : `Você não possui sessões de pacote disponíveis. <a href="pacotes.html" style="color:#b79b63;text-decoration:underline;">Adquira um pacote!</a>`;
+  });
+
   </script>
+
 </body>
 </html>
