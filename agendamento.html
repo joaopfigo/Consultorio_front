@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <style>
     :root {
-      --cor-principal: #30795b;
+      --cor-principal: #57643a;
       --cor-nav: #57643a;
       --cor-destaque: #f7e6bc;
       --cor-fundo: #fcfaf7;
@@ -677,7 +677,7 @@
 </div>
     <div class="step" id="step-dados">
       <h2>5. Preencher dados</h2>
-      <div class="booking-option" id="dados-usuario">
+      <div class="booking-option" id="dados-usuario" style="display:none">
         <button class="btn-login">Você já está logado!</button>
       </div>
       <div class="booking-option" id="dados-guest" style="display:none">
@@ -692,12 +692,30 @@
             <span class="flag">🇧🇷</span>
             <input type="tel" id="guest-phone" name="guest-phone" placeholder="+55" pattern="\+?\d{2,15}" required>
           </div>
-          <label for="guest-idade">Idade</label>
-          <input type="number" id="guest-idade" name="guest-idade" min="1" max="120" required>
+          <label for="guest-nascimento">Data de nascimento</label>
+          <input type="date" id="guest-nascimento" name="guest-nascimento" required>
+
+          <label for="guest-sexo">Sexo</label>
+          <select id="guest-sexo" name="guest-sexo" required>
+            <option value="">Selecione...</option>
+            <option value="feminino">Feminino</option>
+            <option value="masculino">Masculino</option>
+            <option value="outro">Outro</option>
+            <option value="prefiro_nao_dizer">Prefiro não dizer</option>
+          </select>
+
           <div class="chk">
             <input type="checkbox" id="criar-conta" name="criar-conta">
-            <label for="criar-conta">Criar minha conta Reservio para administrar minhas reservas.</label>
+            <label for="criar-conta">Criar minha conta no site para acompanhar meu agendamento</label> 
           </div>
+
+          <div id="campo-senhas" style="display:none; margin-top:12px;">
+            <label for="guest-senha">Senha</label>
+            <input type="password" id="guest-senha" name="guest-senha" autocomplete="new-password">
+            <label for="guest-senha2">Confirmar senha</label>
+            <input type="password" id="guest-senha2" name="guest-senha2" autocomplete="new-password">
+          </div>
+
           <button class="btn-continue" type="submit">CONTINUAR</button>
         </div>
       </div>
@@ -855,9 +873,9 @@
     }
     const now = new Date();
     renderCalendar(now.getFullYear(), now.getMonth());
-      const usuarioLogado = true;
-      document.getElementById('dados-usuario').style.display = usuarioLogado ? '' : 'none';
-      document.getElementById('dados-guest').style.display = usuarioLogado ? 'none' : '';
+  // O estado de login será determinado via AJAX abaixo, então inicialize como false
+  let usuarioLogado = false;
+  // O código correto para exibir os blocos será executado após a resposta do fetch('getPerfil.php')
     // Função para obter o serviço/tratamento selecionado
 function obterServicoSelecionado() {
   const selected = document.querySelectorAll('.treatment.selected');
@@ -916,16 +934,21 @@ document.getElementById('btn-agendar').onclick = function(e) {
 
       // Se o bloco de guest estiver visível (usuário não logado), pega os campos obrigatórios de visitante
       if (document.getElementById('dados-guest').style.display !== 'none') {
-        dados.guest_name = document.getElementById('guest-name').value;
-        dados.guest_email = document.getElementById('guest-email').value;
-        dados.guest_phone = document.getElementById('guest-phone').value;
-        dados.guest_idade = document.getElementById('guest-idade').value || '';
+          dados.guest_name = document.getElementById('guest-name').value;
+          dados.guest_email = document.getElementById('guest-email').value;
+          dados.guest_phone = document.getElementById('guest-phone').value;
+          dados.guest_nascimento = document.getElementById('guest-nascimento').value;
+          dados.guest_sexo = document.getElementById('guest-sexo').value;
+          dados.criar_conta = document.getElementById('criar-conta').checked ? 1 : 0;
+          if (dados.criar_conta) {
+              dados.guest_senha = document.getElementById('guest-senha').value;
+              dados.guest_senha2 = document.getElementById('guest-senha2').value;
+          }
       }
 
       // Adicione aqui a coleta dos outros campos do seu formulário!
 
       // Envia ao PHP (AJAX)
-       console.log(dados);
       fetch('agendar.php', {
         method: 'POST',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -934,38 +957,35 @@ document.getElementById('btn-agendar').onclick = function(e) {
       })
       .then(res => res.text())
       .then(res => {
-        if (res.startsWith("SUCESSO")) {
-          const partes = res.split('|');
-          const agendamentoId = partes[1] || null;
+  if (res.startsWith("SUCESSO")) {
+    const partes = res.split('|');
+    const agendamentoId = partes[1] || null;
 
-          // Se o formulário de queixa foi preenchido, envie agora
-          if (formularioEnviado && agendamentoId) {
-            const formData = new FormData(document.getElementById('form-reclamacoes'));
-            formData.append('agendamento_id', agendamentoId);
-            fetch('salvarQueixa.php', {
-              method: 'POST',
-              body: formData,
-              credentials: 'include'
-            });
-          }
+    // Se o formulário de queixa foi preenchido, envie agora
+    if (formularioEnviado && agendamentoId) {
+      const formData = new FormData(document.getElementById('form-reclamacoes'));
+      formData.append('agendamento_id', agendamentoId);
+      fetch('salvarQueixa.php', {
+        method: 'POST',
+        body: formData,
+        credentials: 'include'
+      });
+    }
 
-          // Esconde o container do agendamento e mostra o de sucesso
-          document.getElementById('agendamento-container').style.display = 'none';
-          document.getElementById('success-container').style.display = 'flex';
-          window.scrollTo({top:0});
-          atualizarPacoteAgendamento();
-        } else if (res.includes("HORARIO_OCUPADO")) {
-          alert("Horário já ocupado. Escolha outro.");
-        } else if (res.includes("DADOS_INCOMPLETOS")) {
-          alert("Preencha todos os dados obrigatórios.");
-        } else if (res.includes("TERMO_NAO_ACEITO")) {
-          alert("Você deve aceitar o termo para agendar.");
-        } else if (res.includes("ERRO_AGENDAR")) {
-          alert("Erro ao agendar. Tente novamente.");
-        } else {
-          alert("Erro desconhecido: " + res);
-        }
-      })
+    // Redireciona para a página de sessão marcada
+    window.location.href = 'sessaoMarcada.html';
+  } else if (res.includes("HORARIO_OCUPADO")) {
+    alert("Horário já ocupado. Escolha outro.");
+  } else if (res.includes("DADOS_INCOMPLETOS")) {
+    alert("Preencha todos os dados obrigatórios.");
+  } else if (res.includes("TERMO_NAO_ACEITO")) {
+    alert("Você deve aceitar o termo para agendar.");
+  } else if (res.includes("ERRO_AGENDAR")) {
+    alert("Erro ao agendar. Tente novamente.");
+  } else {
+    alert("Erro desconhecido: " + res);
+  }
+})
       .catch(erro => {
         alert('Erro ao conectar ao servidor. Tente novamente mais tarde.');
         console.error(erro);
@@ -1157,22 +1177,50 @@ document.getElementById('btn-agendar').onclick = function(e) {
     // Chama ao carregar a página:
     atualizarPacoteAgendamento();
 
+    document.getElementById('criar-conta').addEventListener('change', function() {
+      document.getElementById('campo-senhas').style.display = this.checked ? 'block' : 'none';
+    });
+
+    // (Opcional, mas recomendável) Validar se as senhas batem antes de enviar:
+    document.querySelector('.guest-form').onsubmit = function(e) {
+      if (document.getElementById('criar-conta').checked) {
+        var senha = document.getElementById('guest-senha').value;
+        var senha2 = document.getElementById('guest-senha2').value;
+        if (!senha || !senha2 || senha !== senha2) {
+          alert('As senhas não coincidem ou estão em branco.');
+          document.getElementById('guest-senha').focus();
+          e.preventDefault();
+          return false;
+        }
+      }
+    };
+
     // --- Troca "Perfil" ou "Login" no menu, conforme login ---
     fetch('getPerfil.php', { credentials: 'include' })
       .then(res => res.ok ? res.json() : Promise.reject())
       .then(data => {
           if (data.usuario && data.usuario.nome) {
-              // Usuário logado
+              // Usuário logado: mostra bloco de usuário, esconde visitante
+              document.getElementById('dados-usuario').style.display = 'block';
+              document.getElementById('dados-guest').style.display = 'none';
+          } else {
+              // Não logado: mostra bloco de visitante, esconde usuário
+              document.getElementById('dados-usuario').style.display = 'none';
+              document.getElementById('dados-guest').style.display = 'block';
+          }
+          // Atualiza o menu também
+          if (data.usuario && data.usuario.nome) {
               document.getElementById('li-perfil-login').innerHTML =
                   '<a href="perfil.html"><i class="fa-solid fa-user"></i> Perfil</a>';
           } else {
-              // Não logado
               document.getElementById('li-perfil-login').innerHTML =
                   '<a href="registrar.html"><i class="fa-solid fa-user"></i> Login</a>';
           }
       })
       .catch(() => {
           // Não logado ou erro de sessão
+          document.getElementById('dados-usuario').style.display = 'none';
+          document.getElementById('dados-guest').style.display = 'block';
           document.getElementById('li-perfil-login').innerHTML =
               '<a href="registrar.html"><i class="fa-solid fa-user"></i> Login</a>';
       });

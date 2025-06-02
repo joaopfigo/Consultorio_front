@@ -2,22 +2,102 @@
 include 'conexao.php';
 session_start();
 
-$user_id = $_SESSION['usuario_id'] ?? null;
-$nome = $_POST['guest_name'] ?? null;
-$email = $_POST['guest_email'] ?? null;
-$telefone = $_POST['guest_phone'] ?? null;
-$idade = $_POST['guest_idade'] ?? null;
-$servico_id = $_POST['servico_id'] ?? null;
-$data = $_POST['data'] ?? null;
-$hora = $_POST['hora'] ?? null;
-$duracao = $_POST['duracao'] ?? null;
-$add_reflexo = isset($_POST['add_reflexo']) ? 1 : 0;
-$status = 'Pendente';
+// Coleta todos os campos necessários
+$user_id      = $_SESSION['usuario_id'] ?? null;
+$servico_id   = $_POST['servico_id'] ?? null;
+$data         = $_POST['data'] ?? null;
+$hora         = $_POST['hora'] ?? null;
+$duracao      = $_POST['duracao'] ?? null;
+$add_reflexo  = isset($_POST['add_reflexo']) ? 1 : 0;
+$status       = 'Pendente';
 
+// Campos do formulário de visitante/conta
+$criarConta   = isset($_POST['criar_conta']) ? intval($_POST['criar_conta']) : 0;
+$nome         = $_POST['guest_name'] ?? '';
+$email        = $_POST['guest_email'] ?? '';
+$telefone     = $_POST['guest_phone'] ?? '';
+$nascimento   = $_POST['guest_nascimento'] ?? '';
+$sexo         = $_POST['guest_sexo'] ?? '';
+$senha        = $_POST['guest_senha'] ?? '';
+$senha2       = $_POST['guest_senha2'] ?? '';
+
+// Validação obrigatória dos campos de agendamento
 if (!$servico_id || !$data || !$hora || !$duracao) {
     die("DADOS_INCOMPLETOS");
 }
 $datetime = "$data $hora:00";
+
+if ($user_id) {
+    // Usuário logado: crie o agendamento vinculado ao usuário
+    $stmt = $conn->prepare("INSERT INTO agendamentos (usuario_id, especialidade_id, data_horario, duracao, adicional_reflexo, status, criado_em) VALUES (?, ?, ?, ?, ?, ?, NOW())");
+    $stmt->bind_param("iisiis", $user_id, $servico_id, $datetime, $duracao, $add_reflexo, $status);
+    $ok = $stmt->execute();
+    if ($ok) {
+        $id_agendamento = $stmt->insert_id;
+        die("SUCESSO|$id_agendamento");
+    } else {
+        die("ERRO_AGENDAR");
+    }
+} else {
+    // Usuário visitante: obrigue o preenchimento dos campos
+    if (!$nome || !$email || !$telefone || !$nascimento || !$sexo) {
+        die("DADOS_INCOMPLETOS");
+    }
+    // Se criar conta, processe o cadastro
+    if ($criarConta) {
+        // Validação básica de senha
+        if (!$senha || !$senha2 || $senha !== $senha2) {
+            die("SENHA_INVALIDA");
+        }
+        // Checar se e-mail já existe
+        $stmt = $conn->prepare("SELECT id FROM usuarios WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $stmt->store_result();
+        if ($stmt->num_rows > 0) {
+            die("EMAIL_EXISTENTE");
+        }
+        $stmt->close();
+        // Criar usuário
+        $hash = password_hash($senha, PASSWORD_DEFAULT);
+        $stmt = $conn->prepare("INSERT INTO usuarios (nome, email, telefone, nascimento, sexo, senha_hash) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssss", $nome, $email, $telefone, $nascimento, $sexo, $hash);
+        $ok = $stmt->execute();
+        if ($ok) {
+            $user_id = $stmt->insert_id;
+        } else {
+            die("ERRO_CRIAR_USUARIO");
+        }
+        $stmt->close();
+    }
+
+    // Calcula idade a partir da data de nascimento
+    $idade = null;
+    if ($nascimento) {
+        $dt = DateTime::createFromFormat('Y-m-d', $nascimento);
+        if ($dt) {
+            $idade = $dt->diff(new DateTime('now'))->y;
+        }
+    }
+
+    // Crie o agendamento (como visitante OU recém cadastrado)
+    $stmt = $conn->prepare("INSERT INTO agendamentos 
+        (usuario_id, nome_visitante, email_visitante, telefone_visitante, idade_visitante, especialidade_id, data_horario, duracao, adicional_reflexo, status, criado_em) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+    $stmt->bind_param(
+        "isssiisiis",
+        $user_id, $nome, $email, $telefone, $idade, $servico_id, $datetime, $duracao, $add_reflexo, $status
+    );
+    $ok = $stmt->execute();
+    if ($ok) {
+        $id_agendamento = $stmt->insert_id;
+        die("SUCESSO|$id_agendamento");
+    } else {
+        die("ERRO_AGENDAR");
+    }
+    $stmt->close();
+}
+
 
 // 1. Verifica disponibilidade do horário
 $stmt = $conn->prepare("SELECT id FROM agendamentos WHERE data_horario = ? AND status <> 'Cancelada'");
