@@ -633,7 +633,10 @@
     function renderHistoricoSessoes() {
       const lista = document.getElementById('historico-sessoes');
       lista.innerHTML = '';
-      const passadas = sessoes.filter(s => new Date(s.data) < new Date() || s.status === 'Cancelada');
+      // Só mostra sessões confirmadas ou canceladas (nunca pendentes)
+      const passadas = sessoes.filter(s =>
+        (s.status === 'Confirmada' || s.status === 'Cancelada')
+      );
       if (!passadas.length) {
         lista.innerHTML = '<div class="nenhuma-sessao">Nenhuma sessão anterior encontrada.</div>';
         return;
