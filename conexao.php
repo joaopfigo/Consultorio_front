@@ -1,5 +1,5 @@
 <?php
-$host = "localhost";
+$host = "localhost:3307";  // Aqui define explicitamente a porta 3307
 $user = "root";
 $pass = "";
 $dbname = "terapia_corporal";

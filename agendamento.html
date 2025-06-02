@@ -130,6 +130,25 @@
       box-shadow: 0 6px 40px rgba(160,130,64,0.08);
       padding: 36px 6vw 24px 6vw;
     }
+    #success-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 78vh;
+      animation: fadeIn 0.7s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .success-icon {
+      animation: popIn 0.5s;
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.7); opacity: 0; }
+      80% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); }
+    }
     h1 {
       color: var(--cor-principal);
       font-size: 2.1rem;
@@ -409,16 +428,16 @@
       }
     }
     .treatment.block-hover:not(.selected):hover,
-.treatment.block-hover:not(.selected):active,
-.treatment.block-hover:not(.selected):focus {
-  background: inherit !important;
-  box-shadow: none !important;
-  border-color: #ddd !important;
-  color: inherit !important;
-  filter: none !important;
-  outline: none !important;
-  cursor: not-allowed !important;
-}
+    .treatment.block-hover:not(.selected):active,
+    .treatment.block-hover:not(.selected):focus {
+      background: inherit !important;
+      box-shadow: none !important;
+      border-color: #ddd !important;
+      color: inherit !important;
+      filter: none !important;
+      outline: none !important;
+      cursor: not-allowed !important;
+    }
   </style>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
@@ -436,7 +455,7 @@
       <li><a href="servicos.html">Serviços</a></li>
       <li><a href="blog.html">Blog</a></li>
       <li><a href="contato.html">Contato</a></li>
-      <li><a href="perfil.html"><i class="fa-solid fa-user"></i> Perfil</a></li>
+      <li id="li-perfil-login"><a href="registrar.html"><i class="fa-solid fa-user"></i> Login</a></li>
     </ul>
   </nav>
 
@@ -592,36 +611,36 @@
     <div class="step" id="step-tratamento">
       <h2>2. Escolha o(s) tratamento(s) que deseja realizar (no máximo dois):</h2>
       <div class="treatments">
-        <div class="treatment">
+        <div class="treatment" data-id="1">
           <img src="https://images.pexels.com/photos/3822622/pexels-photo-3822622.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Quick Massage">
           <span>Quick Massage</span>
         </div>
-        <div class="treatment">
+        <div class="treatment" data-id="2">
           <img src="https://images.pexels.com/photos/3997985/pexels-photo-3997985.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Massoterapia">
           <span>Massoterapia</span>
         </div>
-        <div class="treatment">
+        <div class="treatment" data-id="3">
           <img src="https://images.pexels.com/photos/3182811/pexels-photo-3182811.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Reflexologia Podal">
           <span>Reflexologia Podal</span>
         </div>
-        <div class="treatment">
+        <div class="treatment" data-id="4">
           <img src="https://images.pexels.com/photos/6621319/pexels-photo-6621319.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Auriculoterapia">
           <span>Auriculoterapia</span>
         </div>
-        <div class="treatment">
-          <img src="https://images.pexels.com/photos/3757942/pexels-photo-3757942.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Ventosa">
+        <div class="treatment" data-id="5">
+          <img src="img/ventosa.jpg" alt="Ventosa">
           <span>Ventosa</span>
         </div>
-        <div class="treatment">
-          <img src="https://images.pexels.com/photos/161599/massage-therapy-acupuncture-161599.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Acupuntura">
+        <div class="treatment" data-id="6">
+          <img src="img/acupuntura.jpg" alt="Acupuntura">
           <span>Acupuntura</span>
         </div>
-        <div class="treatment">
-          <img src="https://images.pexels.com/photos/4058218/pexels-photo-4058218.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Biomagnetismo">
+        <div class="treatment" data-id="7">
+          <img src="img/biomagnetismo.png" alt="Biomagnetismo">
           <span>Biomagnetismo</span>
         </div>
-        <div class="treatment">
-          <img src="https://images.pexels.com/photos/3759657/pexels-photo-3759657.jpeg?auto=compress&w=300&h=300&fit=crop" alt="Reiki">
+        <div class="treatment" data-id="8">
+          <img src="img/reiki.jpg" alt="Reiki">
           <span>Reiki</span>
         </div>
       </div>
@@ -631,30 +650,24 @@
     <div class="step" id="step-duracao">
       <h2>3. Duração</h2>
       <div class="durations">
-        <label><input type="radio" name="duracao" checked> 50 minutos - R$ 114,00</label>
-        <label><input type="radio" name="duracao"> 75 minutos - R$ 160,00</label>
-        <label><input type="radio" name="duracao"> 90 minutos - R$ 185,00</label>
-        <label><input type="radio" name="duracao"> 120 minutos - R$ 292,00</label>
-        <label><input type="radio" name="duracao"> 190 minutos - R$ 390,00</label>
+        <label><input type="radio" name="duracao" value="150"> 50 min — R$ 150</label>
+        <label><input type="radio" name="duracao" value="200"> 90 min — R$ 200</label>
+        <label><input type="radio" name="duracao" value="pacote"> Utilizar pacote de sessões</label>
       </div>
+      <div id="opcao-comprar-pacote" style="display:none;">
+        <button type="button" onclick="window.location.href='pacotes.html?origem=agendamento'">Comprar pacote</button>
+      </div>
+      <div id="info-pacote"></div>
+
+
       <div class="promo">
-        <h3>PROMOÇÃO: APROVEITE E ACRESCENTE UMA SESSÃO DE REFLEXO!</h3>
-        <div class="combo">
-          <label><input type="radio" name="reflexo" checked> Não tenho interesse</label>
-          <label><input type="radio" name="reflexo"> 20 minutos - R$ 71,00</label>
-          <label><input type="radio" name="reflexo"> 30 minutos - R$ 84,00</label>
-          <label><input type="radio" name="reflexo"> 50 minutos - R$ 100,00</label>
-          <label><input type="radio" name="reflexo"> 60 minutos - R$ 135,00</label>
-        </div>
-      </div>
-      <div class="promo">
-        <h3>PROMOÇÃO: APROVEITE E ACRESCENTE UMA SESSÃO DE AURICULO!</h3>
-        <div class="combo">
-          <label><input type="radio" name="auriculo" checked> Não tenho interesse</label>
-          <label><input type="radio" name="auriculo"> 10 minutos - R$ 48,00</label>
-        </div>
-      </div>
-    </div>
+  <h3>PROMOÇÃO: ACRESCENTE UM ESCALDA PÉS!</h3>
+  <div class="combo">
+    <label>
+      <input type="checkbox" id="escalda-pes" name="escalda-pes"> Quero adicionar escalda pés (+ R$ 60,00)
+    </label>
+  </div>
+</div>
 <div class="step" id="step-horario">
   <h2>4. Escolha a data e o horário</h2>
   <div class="calendar-section">
@@ -679,6 +692,8 @@
             <span class="flag">🇧🇷</span>
             <input type="tel" id="guest-phone" name="guest-phone" placeholder="+55" pattern="\+?\d{2,15}" required>
           </div>
+          <label for="guest-idade">Idade</label>
+          <input type="number" id="guest-idade" name="guest-idade" min="1" max="120" required>
           <div class="chk">
             <input type="checkbox" id="criar-conta" name="criar-conta">
             <label for="criar-conta">Criar minha conta Reservio para administrar minhas reservas.</label>
@@ -687,26 +702,65 @@
         </div>
       </div>
     </div>
+    <div class="total-container" style="margin-top:20px;">
+      <strong>Valor total da sessão: R$ <span id="valor-total">[valor padrão]</span></strong>
+     <br>
+     <small>O pagamento deve ser feito no dia da consulta através de pix, dinheiro, cartão de crédito ou débito.</small>
+    </div>
+
     <button id="btn-agendar" class="btn-continue" style="margin:38px auto 0 auto; display:block; width:220px;">Agendar Sessão</button>
   </div>
   
-<div class="container" id="success-container" style="display:none;min-height:78vh;">
-  <div class="success-card" style="box-shadow: 0 8px 48px rgba(48,121,91,0.10); padding:44px 34px 40px 34px; border-radius:20px; background:#fff;">
-    <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Check" class="success-icon" style="width:72px; margin-bottom:19px; border-radius:50%; box-shadow:0 2px 10px rgba(48,121,91,0.12); background:#e9f8f0;">
-    <h1 style="color:#30795b;font-family:'Playfair Display',serif;font-size:1.7rem;margin:0 0 15px 0; font-weight:700;letter-spacing:0.02em;">Solicitação realizada!</h1>
-    <div class="subtitle" style="font-size:1.09rem;color:#6d6a60; margin-bottom:13px;">
-      Seu agendamento foi enviado e está aguardando confirmação da terapeuta.
+  <div class="container" id="success-container" style="display:none;">
+    <div class="success-card" style="box-shadow: 0 8px 48px rgba(48,121,91,0.10); padding:44px 34px 40px 34px; border-radius:20px; background:#fff; text-align:center;">
+      <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Check" class="success-icon" style="width:72px; margin-bottom:19px; border-radius:50%; box-shadow:0 2px 10px rgba(48,121,91,0.12); background:#e9f8f0;">
+      <h1 style="color:#30795b;font-family:'Playfair Display',serif;font-size:1.7rem;margin:0 0 15px 0; font-weight:700;letter-spacing:0.02em;">Solicitação realizada!</h1>
+      <div class="subtitle" style="font-size:1.09rem;color:#6d6a60; margin-bottom:13px;">
+        Seu agendamento foi enviado e está <b>aguardando confirmação</b> da terapeuta.
+      </div>
+      <div class="info-box" style="font-size:1rem; color:#646e6a; background:#f6f8f6; border-radius:13px; padding:15px 14px 13px 14px; margin:21px 0 0 0;">
+        Você receberá um e-mail de confirmação ou pode acompanhar o status pela página de <b style="color:#30795b;">Perfil</b>.<br>
+        A terapeuta irá revisar sua solicitação e retornará o mais breve possível.
+      </div>
+      <a class="btn-perfil" href="perfil.html" style="margin-top:32px; display:inline-block; background:#30795b; color:#fff; padding:13px 34px; border-radius:10px; font-size:1.09rem; font-weight:bold; text-decoration:none; transition:background .16s; box-shadow:0 2px 16px rgba(48,121,91,0.09);">Ir para o Perfil</a>
     </div>
-    <div class="info-box" style="font-size:1rem; color:#646e6a; background:#f6f8f6; border-radius:13px; padding:15px 14px 13px 14px; margin:21px 0 0 0;">
-      Você receberá um e-mail de confirmação ou pode acompanhar o status pela página de <b style="color:#30795b;">Perfil</b>.<br>
-      A terapeuta irá revisar sua solicitação e retornará o mais breve possível.
-    </div>
-    <a class="btn-perfil" href="perfil.html" style="margin-top:32px; display:inline-block; background:#30795b; color:#fff; padding:13px 34px; border-radius:10px; font-size:1.09rem; font-weight:bold; text-decoration:none; transition:background .16s; box-shadow:0 2px 16px rgba(48,121,91,0.09);">Ir para o Perfil</a>
   </div>
-</div>
 
   <script>
     let formularioEnviado = false;
+    // HTML padrão (todas as opções exceto quick massage sozinho)
+    const htmlDuracoesPadrao = `
+      <label><input type="radio" name="duracao" value="150"> 50 min — R$ 150</label>
+      <label><input type="radio" name="duracao" value="200"> 90 min — R$ 200</label>
+      <label><input type="radio" name="duracao" value="pacote"> Utilizar pacote de sessões</label>
+    `;
+
+    // HTML especial para quick massage sozinho
+    const htmlDuracoesQuick = `
+      <label><input type="radio" name="duracao" value="80"> 20 min — R$ 80</label>
+      <label><input type="radio" name="duracao" value="130"> 40 min — R$ 130</label>
+      <label><input type="radio" name="duracao" value="pacote"> Utilizar pacote de sessões</label>
+    `;
+    function atualizarDuracoes() {
+      const cards = document.querySelectorAll('.treatment.selected');
+      const durationsDiv = document.querySelector('.durations');
+      
+      // Só "Quick Massage" selecionada
+      if (
+        cards.length === 1 &&
+        cards[0].innerText.trim().toLowerCase() === "quick massage"
+      ) {
+        durationsDiv.innerHTML = htmlDuracoesQuick;
+      } else {
+        durationsDiv.innerHTML = htmlDuracoesPadrao;
+      }
+      // Recoloca os eventos nos radios (importante para funcionar o valor total!)
+      document.querySelectorAll('input[name="duracao"]').forEach(function(radio) {
+        radio.addEventListener('change', calcularValorFinal);
+      });
+      calcularValorFinal();
+    }
+
     document.getElementById('btn-formulario').onclick = function() {
       document.getElementById('formulario-section').style.display = 'block';
       document.getElementById('step-formulario').style.display = 'none';
@@ -732,85 +786,190 @@
       document.getElementById('formulario-feedback').style.display = 'none'; // esconde feedback
       document.getElementById('formulario-section').style.display = 'block'; // mostra o formulário
     };
-// Função calendário visual
-function renderCalendar(year, month) {
-  const cal = document.getElementById('custom-calendar');
-  cal.innerHTML = '';
-  const dt = new Date(year, month, 1);
-  const days = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
-  let html = `<div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;'>
-    <button id='prev-month' style='background:none;border:none;font-size:1.3em;cursor:pointer;'>&lt;</button>
-    <span style='font-weight:700;color:#7b5097;'>${dt.toLocaleString('pt-BR', {month:'long'})} ${year}</span>
-    <button id='next-month' style='background:none;border:none;font-size:1.3em;cursor:pointer;'>&gt;</button>
-  </div>`;
-  html += `<div style='display:grid;grid-template-columns:repeat(7,1fr);gap:2px 0;font-weight:bold;'>${days.map(d=>`<span style='color:#bfa464'>${d}</span>`).join('')}</div>`;
-  let firstDay = dt.getDay();
-  let totalDays = new Date(year, month+1, 0).getDate();
-  html += `<div style='display:grid;grid-template-columns:repeat(7,1fr);gap:4px 0;'>`;
-  for(let i=0;i<firstDay;i++) html+="<span></span>";
-  for(let d=1;d<=totalDays;d++){
-    let now = new Date();
-    let isToday = d===now.getDate()&&month===now.getMonth()&&year===now.getFullYear();
-    let dayClass = `cal-day${isToday?" today":""}`;
-    html += `<button class='${dayClass}' data-date='${year}-${(month+1).toString().padStart(2,'0')}-${d.toString().padStart(2,'0')}' style='margin:2px;padding:9px 0;border:none;background:${isToday?'#d8e8d2':'#fff9e2'};border-radius:8px;color:#756430;font-size:1.02em;cursor:pointer;'>${d}</button>`;
-  }
-  html += `</div>`;
-  cal.innerHTML = html;
-  document.getElementById('prev-month').onclick = ()=>renderCalendar(month===0?year-1:year, month===0?11:month-1);
-  document.getElementById('next-month').onclick = ()=>renderCalendar(month===11?year+1:year, month===11?0:month+1);
-  document.querySelectorAll('.cal-day').forEach(btn=>{
-    btn.onclick = function(){
-      document.querySelectorAll('.cal-day').forEach(b=>b.style.boxShadow='none');
-      this.style.boxShadow='0 0 0 2px #7b5097 inset';
-      const val = this.getAttribute('data-date');
-      renderSlots(val);
-    };
-  });
+    // Função calendário visual
+    function renderCalendar(year, month) {
+      const cal = document.getElementById('custom-calendar');
+      cal.innerHTML = '';
+      const dt = new Date(year, month, 1);
+      const days = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+      let html = `<div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;'>
+        <button id='prev-month' style='background:none;border:none;font-size:1.3em;cursor:pointer;'>&lt;</button>
+        <span style='font-weight:700;color:#7b5097;'>${dt.toLocaleString('pt-BR', {month:'long'})} ${year}</span>
+        <button id='next-month' style='background:none;border:none;font-size:1.3em;cursor:pointer;'>&gt;</button>
+      </div>`;
+      html += `<div style='display:grid;grid-template-columns:repeat(7,1fr);gap:2px 0;font-weight:bold;'>${days.map(d=>`<span style='color:#bfa464'>${d}</span>`).join('')}</div>`;
+      let firstDay = dt.getDay();
+      let totalDays = new Date(year, month+1, 0).getDate();
+      html += `<div style='display:grid;grid-template-columns:repeat(7,1fr);gap:4px 0;'>`;
+      for(let i=0;i<firstDay;i++) html+="<span></span>";
+      for(let d=1;d<=totalDays;d++){
+  let btnDate = new Date(year, month, d, 0, 0, 0, 0);
+  let now = new Date();
+  now.setHours(0,0,0,0);
+  let isToday = btnDate.getTime() === now.getTime();
+  let isPast = btnDate.getTime() < now.getTime();
+  let isSunday = btnDate.getDay() === 0;
+
+  let disabled = isPast || isToday || isSunday;
+
+  let dayClass = `cal-day${isToday ? " today" : ""}${disabled ? " cal-disabled" : ""}`;
+  html += `<button class='${dayClass}' data-date='${year}-${(month+1).toString().padStart(2,'0')}-${d.toString().padStart(2,'0')}'
+    style='margin:2px;padding:9px 0;border:none;background:${isToday||isPast||isSunday?'#eaeaea':'#fff9e2'};border-radius:8px;color:${isSunday?'#bdbdbd':'#756430'};font-size:1.02em;cursor:${disabled?'not-allowed':'pointer'};' 
+    ${disabled?'disabled':''}>${d}</button>`;
 }
-// Slots
-const horariosDisponiveis = {
-  '2024-05-22': ["10:00","10:30","12:00","13:30","14:00","15:00"],
-  '2024-05-23': ["09:30","11:00","13:00","14:30","16:00"],
-  '2024-05-24': ["09:00","10:00","11:30","13:30","16:30"]
-};
-function renderSlots(val){
-  const slotsArea = document.getElementById('slots-area');
-  slotsArea.innerHTML = '';
-  let slots = horariosDisponiveis[val] || ["09:00","10:30","13:00","15:00","16:30"];
-  slots.forEach(h => {
-    const el = document.createElement('button');
-    el.type = 'button';
-    el.className = 'slot';
-    el.textContent = h;
-    el.onclick = function() {
-      document.querySelectorAll('.slot').forEach(b=>b.classList.remove('selected'));
-      this.classList.add('selected');
+      html += `</div>`;
+      cal.innerHTML = html;
+      document.getElementById('prev-month').onclick = ()=>renderCalendar(month===0?year-1:year, month===0?11:month-1);
+      document.getElementById('next-month').onclick = ()=>renderCalendar(month===11?year+1:year, month===11?0:month+1);
+      document.querySelectorAll('.cal-day').forEach(btn=>{
+  btn.onclick = function(){
+    if (btn.disabled) return; // Não faz nada se o botão está desabilitado
+    document.querySelectorAll('.cal-day').forEach(b=>b.style.boxShadow='none');
+    this.style.boxShadow='0 0 0 2px #7b5097 inset';
+    const val = this.getAttribute('data-date');
+    renderSlots(val);
+  };
+});
+    }
+    // Slots
+    const horariosDisponiveis = {
+      '2024-05-22': ["10:00","10:30","12:00","13:30","14:00","15:00"],
+      '2024-05-23': ["09:30","11:00","13:00","14:30","16:00"],
+      '2024-05-24': ["09:00","10:00","11:30","13:30","16:30"]
     };
-    slotsArea.appendChild(el);
-  });
-}
-  const now = new Date();
-  renderCalendar(now.getFullYear(), now.getMonth());
+    function renderSlots(val){
+      const slotsArea = document.getElementById('slots-area');
+      slotsArea.innerHTML = '';
+      let slots = horariosDisponiveis[val] || ["09:00","10:30","13:00","15:00","16:30"];
+      slots.forEach(h => {
+        const el = document.createElement('button');
+        el.type = 'button';
+        el.className = 'slot';
+        el.textContent = h;
+        el.onclick = function() {
+          document.querySelectorAll('.slot').forEach(b=>b.classList.remove('selected'));
+          this.classList.add('selected');
+        };
+        slotsArea.appendChild(el);
+      });
+    }
+    const now = new Date();
+    renderCalendar(now.getFullYear(), now.getMonth());
       const usuarioLogado = true;
       document.getElementById('dados-usuario').style.display = usuarioLogado ? '' : 'none';
       document.getElementById('dados-guest').style.display = usuarioLogado ? 'none' : '';
+    // Função para obter o serviço/tratamento selecionado
+function obterServicoSelecionado() {
+  const selected = document.querySelectorAll('.treatment.selected');
+  if (selected.length === 1) {
+    return selected[0].getAttribute('data-id');
+  }
+  if (selected.length === 2) {
+    return selected[0].getAttribute('data-id') + ',' + selected[1].getAttribute('data-id');
+  }
+  return null;
+}
 
-      document.getElementById('btn-agendar').onclick = function(e) {
-      // Validação básica
-      const duracao = document.querySelector('input[name="duracao"]:checked');
-      const slot = document.querySelector('.slot.selected');
-      let guestValid = true;
+// Função para pegar a data escolhida no calendário
+function obterDataSelecionada() {
+  // Pega o botão de slot selecionado e lê o atributo data-date do calendário
+  const btn = document.querySelector('.cal-day[style*="box-shadow"]');
+  return btn ? btn.getAttribute('data-date') : null;
+}
+
+// Função para pegar o horário selecionado
+function obterHoraSelecionada() {
+  const slot = document.querySelector('.slot.selected');
+  return slot ? slot.textContent.trim() : null;
+}
+document.getElementById('btn-agendar').onclick = function(e) {
+  e.preventDefault();
+
+  const duracao = document.querySelector('input[name="duracao"]:checked');
+  const slot = document.querySelector('.slot.selected');
+  const tratamento = obterServicoSelecionado();
+  let guestValid = true;
+
+  // Checa se bloco de guest está visível
+  const guestVisible = document.getElementById('dados-guest').style.display !== 'none';
+
+  if (guestVisible) {
+    guestValid = [...document.querySelectorAll('#dados-guest input[required]')].every(f => f.value.trim() !== "");
+    if (!tratamento || !duracao || !slot || !guestValid) {
+      alert('Preencha todos os campos obrigatórios para agendar a sessão.');
+      return;
+    }
+  } else {
+    if (!tratamento || !duracao || !slot) {
+      alert('Preencha todos os campos obrigatórios para agendar a sessão.');
+      return;
+    }
+  }
+
+      // Prepara os dados para envio
+      const dados = {
+        servico_id: obterServicoSelecionado(),
+        data: obterDataSelecionada(),
+        hora: obterHoraSelecionada(),
+        duracao: duracao.value,
+      };
+
+      // Se o bloco de guest estiver visível (usuário não logado), pega os campos obrigatórios de visitante
       if (document.getElementById('dados-guest').style.display !== 'none') {
-        guestValid = [...document.querySelectorAll('#dados-guest input[required]')].every(f=>f.value.trim()!=="");
-      }
-      if (duracao && slot && guestValid) {
-        document.getElementById('agendamento-container').style.display = 'none';
-        document.getElementById('success-container').style.display = 'flex';
-        window.scrollTo({top:0});
-      } else {
-        alert('Preencha todos os campos obrigatórios para agendar a sessão.');
+        dados.guest_name = document.getElementById('guest-name').value;
+        dados.guest_email = document.getElementById('guest-email').value;
+        dados.guest_phone = document.getElementById('guest-phone').value;
+        dados.guest_idade = document.getElementById('guest-idade').value || '';
       }
 
+      // Adicione aqui a coleta dos outros campos do seu formulário!
+
+      // Envia ao PHP (AJAX)
+       console.log(dados);
+      fetch('agendar.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: new URLSearchParams(dados),
+        credentials: 'include'
+      })
+      .then(res => res.text())
+      .then(res => {
+        if (res.startsWith("SUCESSO")) {
+          const partes = res.split('|');
+          const agendamentoId = partes[1] || null;
+
+          // Se o formulário de queixa foi preenchido, envie agora
+          if (formularioEnviado && agendamentoId) {
+            const formData = new FormData(document.getElementById('form-reclamacoes'));
+            formData.append('agendamento_id', agendamentoId);
+            fetch('salvarQueixa.php', {
+              method: 'POST',
+              body: formData,
+              credentials: 'include'
+            });
+          }
+
+          // Esconde o container do agendamento e mostra o de sucesso
+          document.getElementById('agendamento-container').style.display = 'none';
+          document.getElementById('success-container').style.display = 'flex';
+          window.scrollTo({top:0});
+          atualizarPacoteAgendamento();
+        } else if (res.includes("HORARIO_OCUPADO")) {
+          alert("Horário já ocupado. Escolha outro.");
+        } else if (res.includes("DADOS_INCOMPLETOS")) {
+          alert("Preencha todos os dados obrigatórios.");
+        } else if (res.includes("TERMO_NAO_ACEITO")) {
+          alert("Você deve aceitar o termo para agendar.");
+        } else if (res.includes("ERRO_AGENDAR")) {
+          alert("Erro ao agendar. Tente novamente.");
+        } else {
+          alert("Erro desconhecido: " + res);
+        }
+      })
+      .catch(erro => {
+        alert('Erro ao conectar ao servidor. Tente novamente mais tarde.');
+        console.error(erro);
+      });
     };
     
   function mostrarAvisoTratamento(msg) {
@@ -843,25 +1002,25 @@ function renderSlots(val){
     }, 2500);
   }
 
-// Lógica robusta para seleção de até dois tratamentos
-function atualizarHoverBloqueado() {
-  const selected = document.querySelectorAll('.treatment.selected');
-  const treatments = document.querySelectorAll('.treatment');
-  if (selected.length >= 2) {
-    treatments.forEach(card => {
-      if (!card.classList.contains('selected')) {
-        card.classList.add('block-hover');
+    // Lógica robusta para seleção de até dois tratamentos
+    function atualizarHoverBloqueado() {
+      const selected = document.querySelectorAll('.treatment.selected');
+      const treatments = document.querySelectorAll('.treatment');
+      if (selected.length >= 2) {
+        treatments.forEach(card => {
+          if (!card.classList.contains('selected')) {
+            card.classList.add('block-hover');
+          }
+        });
+      } else {
+        treatments.forEach(card => {
+          card.classList.remove('block-hover');
+        });
       }
-    });
-  } else {
-    treatments.forEach(card => {
-      card.classList.remove('block-hover');
-    });
-  }
-}
+    }
 
-// E, após cada clique, sempre rode:
-document.querySelectorAll('.treatment').forEach(card => {
+    // E, após cada clique, sempre rode:
+    document.querySelectorAll('.treatment').forEach(card => {
   card.addEventListener('click', function (e) {
     e.preventDefault();
     e.stopPropagation();
@@ -870,6 +1029,7 @@ document.querySelectorAll('.treatment').forEach(card => {
     if (this.classList.contains('selected')) {
       this.classList.remove('selected');
       atualizarHoverBloqueado();
+      atualizarDuracoes(); // <-- Aqui!
       return;
     }
     if (selected.length >= 2) {
@@ -881,9 +1041,9 @@ document.querySelectorAll('.treatment').forEach(card => {
     }
     this.classList.add('selected');
     atualizarHoverBloqueado();
+    atualizarDuracoes(); // <-- Aqui!
   }, {passive: false});
 });
-
 
 
     // Menu responsivo sanduíche
@@ -922,6 +1082,102 @@ document.querySelectorAll('.treatment').forEach(card => {
         localStorage.removeItem('servicoSelecionado');
       }
     });
-  </script>
+
+    function calcularValorFinal() {
+      let valor = 0;
+      const duracao = document.querySelector('input[name="duracao"]:checked');
+      const escalda = document.getElementById('escalda-pes').checked ? 60 : 0;
+
+      if (duracao && duracao.value === 'pacote') {
+        valor = 0;
+      } else if (duracao) {
+        valor = parseInt(duracao.value, 10);
+      }
+      valor += escalda;
+
+      // Atualiza o valor na tela
+      document.getElementById('valor-total').textContent = valor === 0 ? '0,00' : valor.toFixed(2).replace('.', ',');
+
+      // Mensagem de pagamento
+      if (valor === 0) {
+        document.querySelector('.total-container small').textContent = 
+          "O valor desta consulta será debitado do seu pacote. Nenhum pagamento é necessário.";
+      } else {
+        document.querySelector('.total-container small').textContent =
+          "O pagamento deve ser feito no dia da consulta através de Pix, dinheiro, cartão de crédito ou débito.";
+      }
+    }
+
+    // Atualiza sempre que mudar as opções
+    document.querySelectorAll('input[name="duracao"]').forEach(function(radio) {
+      radio.addEventListener('change', calcularValorFinal);
+    });
+    document.getElementById('escalda-pes').addEventListener('change', calcularValorFinal);
+
+    // Chama na inicialização
+    calcularValorFinal();
+
+
+    // Ao carregar a página, verifica sessões restantes do usuário
+    let sessoesDisponiveis = 0;
+    // Função reutilizável
+    function atualizarPacoteAgendamento() {
+      fetch('getPacoteUsuario.php')
+        .then(res => res.json())
+        .then((data) => {
+          sessoesDisponiveis = data.sessoes_restantes || data.disponiveis || 0;
+
+          const inputPacote = document.querySelector('input[name="duracao"][value="pacote"]');
+          if (!inputPacote) return; // Não existe opção de pacote, não faz nada
+          const labelPacote = inputPacote.parentElement;
+
+          // Remove info duplicada se recarregar
+          const info = document.getElementById('pacote-info-agendamento');
+          if (info) info.remove();
+
+          // Exibe ou bloqueia
+          if (sessoesDisponiveis > 0) {
+            inputPacote.disabled = false;
+            labelPacote.innerHTML += ` <span id="pacote-info-agendamento" style="color:#30795b;">(${sessoesDisponiveis} sessões restantes)</span>`;
+          } else {
+            inputPacote.disabled = true;
+            labelPacote.innerHTML += ` <span id="pacote-info-agendamento" style="color:#b48c1a;">(Sem sessões de pacote. <a href="pacotes.html" style="text-decoration:underline;">Comprar pacote</a>)</span>`;
+            // Botão extra
+            let promoDiv = document.querySelector('.promo');
+            if (promoDiv && !document.getElementById('btn-comprar-pacote')) {
+              promoDiv.innerHTML += `<div style="margin-top:8px;">
+                <button id="btn-comprar-pacote" onclick="window.location.href='pacotes.html'" style="background:#b79b63;color:#fff;padding:7px 20px;border-radius:8px;font-size:1rem;border:none;cursor:pointer;">
+                  Comprar pacote de sessões
+                </button>
+              </div>`;
+            }
+          }
+        });
+    }
+    // Chama ao carregar a página:
+    atualizarPacoteAgendamento();
+
+    // --- Troca "Perfil" ou "Login" no menu, conforme login ---
+    fetch('getPerfil.php', { credentials: 'include' })
+      .then(res => res.ok ? res.json() : Promise.reject())
+      .then(data => {
+          if (data.usuario && data.usuario.nome) {
+              // Usuário logado
+              document.getElementById('li-perfil-login').innerHTML =
+                  '<a href="perfil.html"><i class="fa-solid fa-user"></i> Perfil</a>';
+          } else {
+              // Não logado
+              document.getElementById('li-perfil-login').innerHTML =
+                  '<a href="registrar.html"><i class="fa-solid fa-user"></i> Login</a>';
+          }
+      })
+      .catch(() => {
+          // Não logado ou erro de sessão
+          document.getElementById('li-perfil-login').innerHTML =
+              '<a href="registrar.html"><i class="fa-solid fa-user"></i> Login</a>';
+      });
+    
+</script>
+
 </body>
 </html>

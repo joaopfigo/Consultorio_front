@@ -65,6 +65,31 @@ while ($row = $result->fetch_assoc()) {
 }
 $stmt2->close();
 
+if (empty($user_id)) {
+   echo json_encode(["erro" => true, "mensagem" => "Usuário não autenticado."]);
+   exit;
+} 
+
+// Inicializa variáveis de pacote
+// 1. Variáveis default
+$total = 0;
+$usadas = 0;
+$sessoes_disp = 0;
+
+// 2. Executa query só se tem $user_id
+if (!empty($user_id)) {
+    $stmt = $conn->prepare("SELECT total_sessoes, sessoes_usadas FROM pacotes WHERE usuario_id=? ORDER BY id DESC LIMIT 1");
+    $stmt->bind_param("i", $user_id);
+    if ($stmt->execute()) {
+        $stmt->bind_result($totalDB, $usadasDB);
+        if ($stmt->fetch()) {
+            $total = (int)$totalDB;
+            $usadas = (int)$usadasDB;
+            $sessoes_disp = $total - $usadas;
+        }
+        $stmt->close();
+    }
+}
 // 4. Retorna JSON final
 echo json_encode([
     "usuario" => $usuario,

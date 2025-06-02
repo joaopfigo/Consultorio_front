@@ -238,7 +238,7 @@
             <li><a href="servicos.html">Serviços</a></li>
             <li><a href="blog.html">Blog</a></li>
             <li><a href="contato.html">Contato</a></li>
-            <li><a href="perfil.html"><i class="fa-solid fa-user"></i> Perfil</a></li>
+            <li id="li-perfil-login"><a href="registrar.html"><i class="fa-solid fa-user"></i> Login</a></li>
         </ul>
     </nav>
   <div class="banner-sobre">Sobre Virlene Figueiredo</div>
@@ -296,6 +296,26 @@
         navbarMenu.classList.remove('open');
         });
     });
+    // --- Troca "Perfil" ou "Login" no menu, conforme login ---
+    fetch('getPerfil.php', { credentials: 'include' })
+      .then(res => res.ok ? res.json() : Promise.reject())
+      .then(data => {
+          if (data.usuario && data.usuario.nome) {
+              // Usuário logado
+              document.getElementById('li-perfil-login').innerHTML =
+                  '<a href="perfil.html"><i class="fa-solid fa-user"></i> Perfil</a>';
+          } else {
+              // Não logado
+              document.getElementById('li-perfil-login').innerHTML =
+                  '<a href="registrar.html"><i class="fa-solid fa-user"></i> Login</a>';
+          }
+      })
+      .catch(() => {
+          // Não logado ou erro de sessão
+          document.getElementById('li-perfil-login').innerHTML =
+              '<a href="registrar.html"><i class="fa-solid fa-user"></i> Login</a>';
+      });
+
 </script>
 
 </body>

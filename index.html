@@ -190,6 +190,29 @@
     transition: background 0.2s;
     box-shadow: 0 2px 6px #0001;
     }
+    .btn-pacote {
+  background: #b78710;
+  color: #fff;
+  border: none;
+  padding: 0.95rem 2.3rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border-radius: 24px;
+  text-decoration: none;
+  transition: background 0.2s;
+  box-shadow: 0 2px 6px #0001;
+  display: inline-block;
+  margin-top: 1.1rem;
+  margin-left: 0;
+}
+
+.btn-pacote:hover {
+  background: #b37e00;
+}
+@media (max-width: 600px) {
+  .btn-pacote { font-size: 1.08rem; padding: 0.85rem 0.8rem; }
+}
+
     .btn-primary:hover {
     background: #b37e00;
     }
@@ -699,7 +722,7 @@
       <li><a href="servicos.html">Serviços</a></li>
       <li><a href="blog.html">Blog</a></li>
       <li><a href="contato.html">Contato</a></li>
-      <li><a href="perfil.html"><i class="fa-solid fa-user"></i> Perfil</a></li>
+      <li id="li-perfil-login"><a href="registrar.html"><i class="fa-solid fa-user"></i> Login</a></li>
     </ul>
   </nav>
 
@@ -710,6 +733,9 @@
         <h1>Consultório de Terapia Corporal Sistêmica</h1>
         <p>Reconecte-se com seu corpo em um espaço onde cada detalhe traduz equilíbrio e presença.</p>
         <a href="agendamento.html" class="btn-primary">Agendar uma consulta</a>
+        <br>
+        <a href="pacotes.html" class="btn-pacote">Comprar pacote de sessões</a>
+
     </div>
   </header>
 
@@ -916,6 +942,26 @@
     });
     // Inicia carrossel
     showFeedback(0);
+
+    // --- Troca "Perfil" ou "Login" no menu, conforme login ---
+    fetch('getPerfil.php', { credentials: 'include' })
+      .then(res => res.ok ? res.json() : Promise.reject())
+      .then(data => {
+          if (data.usuario && data.usuario.nome) {
+              // Usuário logado
+              document.getElementById('li-perfil-login').innerHTML =
+                  '<a href="perfil.html"><i class="fa-solid fa-user"></i> Perfil</a>';
+          } else {
+              // Não logado
+              document.getElementById('li-perfil-login').innerHTML =
+                  '<a href="registrar.html"><i class="fa-solid fa-user"></i> Login</a>';
+          }
+      })
+      .catch(() => {
+          // Não logado ou erro de sessão
+          document.getElementById('li-perfil-login').innerHTML =
+              '<a href="registrar.html"><i class="fa-solid fa-user"></i> Login</a>';
+      });
   </script>
 
 </body>

@@ -1,21 +1,44 @@
 <?php
-include 'conexao.php';
-$nome = $_POST['nome'];
-$email = $_POST['email'];
-$mensagem = $_POST['mensagem'];
+header('Content-Type: text/plain');
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+require 'PHPMailer-master/src/Exception.php';
+require 'PHPMailer-master/src/PHPMailer.php';
+require 'PHPMailer-master/src/SMTP.php';
 
-// Envia email para admin
-$para = "profissional@seudominio.com";
-$assunto = "Mensagem de Contato de $nome";
-$corpo = "Nome: $nome\nEmail: $email\nMensagem:\n$mensagem";
-$headers = "From: $email";  // define remetente como o email do usuário
-mail($para, $assunto, $corpo, $headers);
+// Dados do formulário
+$nome = trim($_POST['nome'] ?? '');
+$email = trim($_POST['email'] ?? '');
+$mensagem = trim($_POST['mensagem'] ?? '');
 
-// Salva no banco (opcional)
-$stmt = $conn->prepare("INSERT INTO contatos (nome, email, mensagem) VALUES (?,?,?)");
-$stmt->bind_param("sss", $nome, $email, $mensagem);
-$stmt->execute();
-$stmt->close();
+if (!$nome || !$email || !$mensagem) {
+    echo "ERRO";
+    exit;
+}
 
-echo "OK";
+// Envio por PHPMailer
+$mail = new PHPMailer(true);
+try {
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com';
+    $mail->SMTPAuth = true;
+    $mail->Username = 'virleneterapiacorporal@gmail.com'; // email da profissional
+    $mail->Password = 'knvy lhjs uvlq fjax'; // senha de app
+    $mail->SMTPSecure = 'tls';
+    $mail->Port = 587;
+
+    $mail->setFrom('virleneterapiacorporal@gmail.com', 'Site Consultório');
+    $mail->addAddress('virleneterapiacorporal@gmail.com', 'Virlene Figueiredo');
+    // Se quiser aparecer o email do usuário como reply
+    $mail->addReplyTo($email, $nome);
+
+    $mail->isHTML(false);
+    $mail->Subject = "Mensagem de contato do site";
+    $mail->Body = "Nome: $nome\nEmail: $email\n\nMensagem:\n$mensagem";
+
+    $mail->send();
+    echo "SUCESSO";
+} catch (Exception $e) {
+    echo "ERRO";
+}
 ?>

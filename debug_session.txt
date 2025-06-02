@@ -1,0 +1,5 @@
+Array
+(
+    [usuario_id] => 2
+    [usuario_nome] => João Pedro Figueiredo
+)
